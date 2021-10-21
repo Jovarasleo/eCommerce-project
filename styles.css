@@ -1,0 +1,19 @@
+body{
+    margin:auto;
+    width: 80%;
+}
+#app-items {
+    margin:auto;
+    display: grid;
+    max-width: 1200px;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: auto;
+    gap:20px;
+}
+.itemImg{
+    width: 100%;
+}
+.info-container{
+    display: flex;
+    flex-direction: column;
+}
