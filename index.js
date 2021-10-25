@@ -9,7 +9,7 @@ let items = [
 {name: "Asus ROG Strix X570-E Gaming", id:"8", price:197.89, pictures:["https://cdna.pcpartpicker.com/static/forever/images/product/8edda8b2608b4fe4e5c3777f9e6df4fd.256p.jpg"], quantity: 2, description:""},
 {name: "MSI Z490-A PRO", id:"9", price:197.89, pictures:["https://cdna.pcpartpicker.com/static/forever/images/product/20b2f4cc60ded2ad4529beae7b0dda14.256p.jpg"], quantity: 7, description:""},
 {name: "MSI B550M PRO-VDH WIFI", id:"10", price:197.89, pictures:["https://cdna.pcpartpicker.com/static/forever/images/product/57b4a5399dc626e9c5786f786aeb94ac.256p.jpg"], quantity: 2, description:""},
-{name: "MSI B450 TOMAHAWK MAX", id:"10", price:197.89, pictures:["https://cdna.pcpartpicker.com/static/forever/images/product/0a8a0ca77620c63b68fec6323537d50a.256p.jpg"], quantity: 1, description:""}];
+{name: "MSI B450 TOMAHAWK MAX", id:"11", price:197.89, pictures:["https://cdna.pcpartpicker.com/static/forever/images/product/0a8a0ca77620c63b68fec6323537d50a.256p.jpg"], quantity: 1, description:""}];
 
 
 const appItems = document.querySelector("#app-items");
@@ -47,7 +47,12 @@ function cartRender(){
     select.type = "number";
     select.min = 1;
     select.max = item.quantity;
-    select.value = 1;
+    select.value = quantityCheck();
+    function quantityCheck () {
+        if(cartArray[realIndex].quantity>item.quantity){
+        return select.value = item.quantity}
+        else return select.value = cartArray[realIndex].quantity;
+    }
     removeBtn.textContent = "remove";
 
     removeBtn.addEventListener("click",()=>{
@@ -94,10 +99,10 @@ function render(){
         cardInfoPrice.textContent = `${item.price}$`;
         toCart.textContent = "Add to cart"
         toCart.addEventListener("click",()=>{
-            if (select.value>0){
+            if (select.value>0 && select.value <= item.quantity){
                     console.log(item.id);
                     if (cartArray.some(o => o.id == item.id)) {
-                        cartArray.find(o => o.id == item.id).quantity += 1;
+                        cartArray.find(o => o.id == item.id).quantity += Number(select.value);
                       } else {cartArray.push({id: item.id, quantity: Number(select.value)})}
                     }
             console.log(item.id, select.value,"cartArray:",cartArray);
