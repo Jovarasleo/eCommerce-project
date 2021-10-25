@@ -1,26 +1,15 @@
 let items;
 fetch('/data.json')
-  .then(response => response.json())
-  .then(data => items = data);
-
-// [
-// {name: "Asus TUF GAMING X570-PLUS (WI-FI)", id:"1", price:197.89, pictures:["https://cdna.pcpartpicker.com/static/forever/images/product/8d7d0435e8a2af93b5d91a1a5dccd476.256p.jpg"], quantity: 2, description:""},
-// {name: "Asus ROG STRIX B550-F GAMING (WI-FI)", id:"2", price:197.89, pictures:["https://m.media-amazon.com/images/I/51xfJ2RkmKL.jpg"], quantity: 2, description:""},
-// {name: "MSI MAG B550 TOMAHAWK", id:"3", price:197.89, pictures:["https://cdna.pcpartpicker.com/static/forever/images/product/52ee465cbd64b16145232d863524c066.256p.jpg"], quantity: 4, description:""},
-// {name: "MSI B550-A PRO", id:"4", price:197.89, pictures:["https://cdna.pcpartpicker.com/static/forever/images/product/662aee2a85bbe3b7e12224e381e57d24.256p.jpg"], quantity: 2, description:""},
-// {name: "ASRock B450M Pro4", id:"5", price:197.89, pictures:["https://cdna.pcpartpicker.com/static/forever/images/product/8f8baff091bfd5ef531c7ddb1a602ca4.256p.jpg"], quantity: 3, description:""},
-// {name: "Asus ROG STRIX B550-A GAMING", id:"6", price:197.89, pictures:["https://cdna.pcpartpicker.com/static/forever/images/product/5ac88d84f61dd91c0621ac30c4dc5480.256p.jpg"], quantity: 5, description:""},
-// {name: "Asus PRIME B560-PLUS", id:"7", price:197.89, pictures:["https://cdna.pcpartpicker.com/static/forever/images/product/9ff7242b59122ddd64439dea6d70d194.256p.jpg"], quantity: 2, description:""},
-// {name: "Asus ROG Strix X570-E Gaming", id:"8", price:197.89, pictures:["https://cdna.pcpartpicker.com/static/forever/images/product/8edda8b2608b4fe4e5c3777f9e6df4fd.256p.jpg"], quantity: 2, description:""},
-// {name: "MSI Z490-A PRO", id:"9", price:197.89, pictures:["https://cdna.pcpartpicker.com/static/forever/images/product/20b2f4cc60ded2ad4529beae7b0dda14.256p.jpg"], quantity: 7, description:""},
-// {name: "MSI B550M PRO-VDH WIFI", id:"10", price:197.89, pictures:["https://cdna.pcpartpicker.com/static/forever/images/product/57b4a5399dc626e9c5786f786aeb94ac.256p.jpg"], quantity: 2, description:""},
-// {name: "MSI B450 TOMAHAWK MAX", id:"11", price:197.89, pictures:["https://cdna.pcpartpicker.com/static/forever/images/product/0a8a0ca77620c63b68fec6323537d50a.256p.jpg"], quantity: 1, description:""}];
-
+.then(response => response.json())
+.then(data => items = data)
+.then(() => render(items))
 
 const appItems = document.querySelector("#app-items");
 const cartIcon = document.querySelector(".cartIcon i");
 const body = document.querySelector("body");
 const cartTag = document.querySelector(".cart");
+const searchInput = document.querySelector(".searchInput");
+const searchBtn = document.querySelector(".searchBtn");
 let cartArray = []
 
 function createEl(type, elClass) {
@@ -75,7 +64,10 @@ function cartRender(){
 
 //function to render all items in the main page
 function render(){
-    items.forEach((item)=>{
+    appItems.innerHTML = null;
+    items.filter((item)=>{
+        {if (item.name.toLowerCase().includes(searchInput.value.toLowerCase()))
+          {return item}}}).forEach((item)=>{
         let card = createEl("div", "itemCard")
         let cardImg = createEl("img", "itemImg")
         let cardInfo = createEl("div", "info-container")
@@ -97,12 +89,13 @@ function render(){
         select.max = item.quantity;
 
         incBtnplus.addEventListener("click",()=>{incrementValue(select, item.quantity)})
-        incBtnminus.addEventListener("click",()=>{decrementValue(select, item.quantity)})
+        incBtnminus.addEventListener("click",()=>{decrementValue(select)})
 
         cardInfoQuantity.textContent = `Stock: ${item.quantity}`;
         cardInfoName.textContent = item.name;
         cardInfoPrice.textContent = `${item.price}$`;
-        toCart.textContent = "Add to cart"
+        toCart.textContent = "Add to cart";
+        cartIcon.textContent = 0;
         toCart.addEventListener("click",()=>{
             if (select.value>0 && select.value <= item.quantity){
                     console.log(item.id);
@@ -121,10 +114,6 @@ function render(){
         cardImg.src = item.pictures[0];
     })
 }
-
-window.addEventListener("load",()=>{
-    render()
-})
 //hide 
 cartIcon.addEventListener("click",() => {
     cartTag.classList.toggle("is-active")
@@ -136,16 +125,24 @@ function incrementValue(select, quantity)
     value = isNaN(value) ? 0 : value;
     if(value<quantity){
         value++;
-            select.value = value;
-    }
+            select.value = value;}
 }
-function decrementValue(select, quantity)
-{
-    var value = parseInt(select.value, quantity);
+function decrementValue(select)
+{   console.log("function fires")
+    var value = parseInt(select.value);
     value = isNaN(value) ? 0 : value;
     if(value>1){
         value--;
-        select.value = value;
-    }
-
+        select.value = value;}
 }
+//eventlisteners to filter search results
+document.addEventListener("keydown", (event)=>{
+    if (event.key === 'Enter'){
+        render()}
+})
+searchBtn.addEventListener("click",()=>{
+    render()
+})
+searchInput.addEventListener("input",()=>{
+    if(!searchInput.value){render()}
+})
