@@ -4,6 +4,7 @@ const body = document.querySelector("body");
 const cartTag = document.querySelector(".cart");
 const searchInput = document.querySelector(".searchInput");
 const searchBtn = document.querySelector(".searchBtn");
+
 let cartArray = [];
 let id = location.href.split("=")[1];
 console.log(id);
@@ -43,6 +44,9 @@ function render() {
   let incBtnminus = createEl("button", "selectdec");
   let quantityContainer = createEl("span", "quantityContainer");
   let aTag = createEl("a", "link");
+  let imageContainer = createEl("div", "image__Container");
+  let arrowRight = createEl("div", "arrowRight");
+  let arrowLeft = createEl("div", "arrowLeft");
 
   incBtnplus.textContent = "+";
   incBtnminus.textContent = "-";
@@ -82,12 +86,53 @@ function render() {
     cartRender(cartArray, items[realIndex]);
     localStorage.setItem("cart", JSON.stringify(cartArray));
   });
+  //
+  //append section
   quantityContainer.append(incBtnminus, select, incBtnplus);
   aTag.append(cardInfoName);
   cardInfo.append(aTag, cardInfoPrice, cardInfoQuantity);
-  card.append(cardImg, cardInfo, quantityContainer, toCart);
+  imageContainer.append(cardImg);
+  if (items[realIndex].pictures.length > 1) {
+    imageContainer.append(arrowRight, arrowLeft);
+  }
+  card.append(imageContainer, cardInfo, quantityContainer, toCart);
   displayItem.appendChild(card);
-  cardImg.src = items[realIndex].pictures[0];
+
+  //gallery sectiom
+  if (items[realIndex].pictures.length) {
+    cardImg.src = items[realIndex].pictures[0];
+    console.log(items[realIndex].pictures);
+  } else {
+    cardImg.src = items[realIndex].thumbnail;
+  }
+
+  const pictureArrLength = items[realIndex].pictures.length;
+  const picturesArray = items[realIndex].pictures;
+  let newindex = 0;
+  function nextImage() {
+    if (newindex < pictureArrLength - 1) {
+      newindex++;
+      cardImg.src = picturesArray[newindex];
+    } else if (newindex == pictureArrLength - 1) {
+      cardImg.src = picturesArray[0];
+      newindex = 0;
+    }
+  }
+  function previousImage() {
+    if (newindex < picturesArray.length && newindex > 0) {
+      newindex--;
+      cardImg.src = picturesArray[newindex];
+    } else if (newindex == 0) {
+      cardImg.src = picturesArray[pictureArrLength - 1];
+      newindex = pictureArrLength - 1;
+    }
+  }
+  arrowRight.addEventListener("click", () => {
+    nextImage();
+  });
+  arrowLeft.addEventListener("click", () => {
+    previousImage();
+  });
 }
 //function to render all objects added to cartArray
 function cartRender() {
@@ -115,7 +160,7 @@ function cartRender() {
     incBtnplus.textContent = "+";
     incBtnminus.textContent = "-";
 
-    cartImg.src = item.pictures[0];
+    cartImg.src = item.thumbnail;
     cartInfoName.textContent = item.name;
     cartInfoPrice.textContent = item.price;
 

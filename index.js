@@ -50,7 +50,7 @@ function cartRender() {
       localStorage.setItem("cart", JSON.stringify(cartArray));
     });
 
-    cartImg.src = item.pictures[0];
+    cartImg.src = item.thumbnail;
     cartInfoName.textContent = item.name;
     cartInfoPrice.textContent = item.price;
 
@@ -154,7 +154,7 @@ function render() {
       cardInfo.append(aTag, cardInfoPrice, cardInfoQuantity);
       card.append(cardImg, cardInfo, quantityContainer, toCart);
       appItems.appendChild(card);
-      cardImg.src = item.pictures[0];
+      cardImg.src = item.thumbnail;
     });
 }
 //hide
