@@ -50,7 +50,13 @@ function cartRender() {
       localStorage.setItem("cart", JSON.stringify(cartArray));
     });
 
-    cartImg.src = item.thumbnail;
+    if (item.thumbnail) {
+      cartImg.src = item.thumbnail;
+    } else if (item.pictures.length) {
+      cartImg.src = item.pictures[0];
+    } else {
+      cartImg.src = "/assets/icons/no-image.png";
+    }
     cartInfoName.textContent = item.name;
     cartInfoPrice.textContent = item.price;
 
@@ -154,7 +160,13 @@ function render() {
       cardInfo.append(aTag, cardInfoPrice, cardInfoQuantity);
       card.append(cardImg, cardInfo, quantityContainer, toCart);
       appItems.appendChild(card);
-      cardImg.src = item.thumbnail;
+      if (item.thumbnail) {
+        cardImg.src = item.thumbnail;
+      } else if (item.pictures.length) {
+        cardImg.src = item.pictures[0];
+      } else {
+        cardImg.src = "/assets/icons/no-image.png";
+      }
     });
 }
 //hide

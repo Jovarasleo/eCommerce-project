@@ -102,8 +102,10 @@ function render() {
   if (items[realIndex].pictures.length) {
     cardImg.src = items[realIndex].pictures[0];
     console.log(items[realIndex].pictures);
-  } else {
+  } else if (items[realIndex].thumbnail) {
     cardImg.src = items[realIndex].thumbnail;
+  } else {
+    cardImg.src = "/assets/icons/no-image.png";
   }
 
   const pictureArrLength = items[realIndex].pictures.length;
@@ -160,7 +162,12 @@ function cartRender() {
     incBtnplus.textContent = "+";
     incBtnminus.textContent = "-";
 
-    cartImg.src = item.thumbnail;
+    if (item.thumbnail) {
+      cartImg.src = item.thumbnail;
+    } else if (item.pictures.length) {
+      cartImg.src = item.pictures[0];
+    } else cartImg.src = "/assets/icons/no-image.png";
+
     cartInfoName.textContent = item.name;
     cartInfoPrice.textContent = item.price;
 

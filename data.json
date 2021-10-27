@@ -93,10 +93,8 @@
     "name": "MSI Z490-A PRO",
     "id": "9",
     "price": 197.89,
-    "thumbnail": "https://cdna.pcpartpicker.com/static/forever/images/product/20b2f4cc60ded2ad4529beae7b0dda14.256p.jpg",
-    "pictures": [
-      "https://cdna.pcpartpicker.com/static/forever/images/product/20b2f4cc60ded2ad4529beae7b0dda14.256p.jpg"
-    ],
+    "thumbnail": "",
+    "pictures": [],
     "quantity": 7,
     "description": ""
   },
@@ -104,7 +102,7 @@
     "name": "MSI B550M PRO-VDH WIFI",
     "id": "10",
     "price": 197.89,
-    "thumbnail": "https://cdna.pcpartpicker.com/static/forever/images/product/57b4a5399dc626e9c5786f786aeb94ac.256p.jpg",
+    "thumbnail": "",
     "pictures": [
       "https://cdna.pcpartpicker.com/static/forever/images/product/57b4a5399dc626e9c5786f786aeb94ac.256p.jpg"
     ],
