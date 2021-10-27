@@ -13,13 +13,21 @@ function createEl(type, elClass) {
   element.classList = elClass;
   return element;
 }
-fetch("/data.json")
-  .then((response) => response.json())
-  .then((data) => {
-    items = data;
+window.addEventListener("load", async () => {
+  const result = await fetch("/data.json");
+  const data = await result.json();
+
+  items = data;
+  render(items[id]);
+
+  if (localStorage.getItem("cart")) {
+    console.log("hello");
     console.log(items);
-    render(items[id]);
-  });
+    cartArray = JSON.parse(localStorage.getItem("cart"));
+    console.log(cartArray);
+    cartRender();
+  }
+});
 
 function render() {
   const realIndex = items.findIndex((obj) => obj.id === id);
@@ -81,6 +89,7 @@ function render() {
   displayItem.appendChild(card);
   cardImg.src = items[realIndex].pictures[0];
 }
+//function to render all objects added to cartArray
 function cartRender() {
   let container =
     cartTag.querySelector(".cartContainer") || createEl("div", "cartContainer");
@@ -99,10 +108,27 @@ function cartRender() {
     let cartInfoPrice = createEl("span", "cartitemPrice");
     let removeBtn = createEl("button", "removeBtn");
     let select = createEl("input", "selectQuantity");
+    let incBtnplus = createEl("button", "selectinc");
+    let incBtnminus = createEl("button", "selectdec");
+    let quantityContainer = createEl("span", "quantityContainer");
+
+    incBtnplus.textContent = "+";
+    incBtnminus.textContent = "-";
 
     cartImg.src = item.pictures[0];
     cartInfoName.textContent = item.name;
     cartInfoPrice.textContent = item.price;
+
+    incBtnplus.addEventListener("click", () => {
+      incrementValue(select, items[realIndex].quantity);
+      cartArray[realIndex].quantity = Number(select.value);
+      localStorage.setItem("cart", JSON.stringify(cartArray));
+    });
+    incBtnminus.addEventListener("click", () => {
+      decrementValue(select);
+      cartArray[realIndex].quantity = Number(select.value);
+      localStorage.setItem("cart", JSON.stringify(cartArray));
+    });
 
     select.type = "number";
     select.min = 1;
@@ -117,14 +143,23 @@ function cartRender() {
 
     removeBtn.addEventListener("click", () => {
       cartArray.splice(realIndex, 1);
+      localStorage.setItem("cart", JSON.stringify(cartArray));
       cartIcon.textContent = cartArray.length;
       cartRender();
     });
-
-    cartItem.append(cartImg, cartInfoName, cartInfoPrice, removeBtn, select);
+    quantityContainer.append(incBtnminus, select, incBtnplus);
+    cartItem.append(
+      cartImg,
+      cartInfoName,
+      cartInfoPrice,
+      removeBtn,
+      quantityContainer
+    );
     container.append(cartItem);
     cartTag.append(container);
     console.log(cart);
+    localStorage.setItem("cart", JSON.stringify(cartArray));
+    cartIcon.textContent = cartArray.length;
   });
 }
 //hide

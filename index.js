@@ -32,6 +32,23 @@ function cartRender() {
     let cartInfoPrice = createEl("span", "cartitemPrice");
     let removeBtn = createEl("button", "removeBtn");
     let select = createEl("input", "selectQuantity");
+    let incBtnplus = createEl("button", "selectinc");
+    let incBtnminus = createEl("button", "selectdec");
+    let quantityContainer = createEl("span", "quantityContainer");
+
+    incBtnplus.textContent = "+";
+    incBtnminus.textContent = "-";
+
+    incBtnplus.addEventListener("click", () => {
+      incrementValue(select, item.quantity);
+      cartArray[realIndex].quantity = Number(select.value);
+      localStorage.setItem("cart", JSON.stringify(cartArray));
+    });
+    incBtnminus.addEventListener("click", () => {
+      decrementValue(select);
+      cartArray[realIndex].quantity = Number(select.value);
+      localStorage.setItem("cart", JSON.stringify(cartArray));
+    });
 
     cartImg.src = item.pictures[0];
     cartInfoName.textContent = item.name;
@@ -50,15 +67,23 @@ function cartRender() {
 
     removeBtn.addEventListener("click", () => {
       cartArray.splice(realIndex, 1);
+      localStorage.setItem("cart", JSON.stringify(cartArray));
       cartIcon.textContent = cartArray.length;
       cartRender();
     });
-
-    cartItem.append(cartImg, cartInfoName, cartInfoPrice, removeBtn, select);
+    quantityContainer.append(incBtnminus, select, incBtnplus);
+    cartItem.append(
+      cartImg,
+      cartInfoName,
+      cartInfoPrice,
+      removeBtn,
+      quantityContainer
+    );
     container.append(cartItem);
     cartTag.append(container);
     console.log(cart);
     localStorage.setItem("cart", JSON.stringify(cartArray));
+    cartIcon.textContent = cartArray.length;
   });
 }
 
@@ -168,15 +193,16 @@ searchInput.addEventListener("input", () => {
     render();
   }
 });
-window.addEventListener("load", () => {
-  fetch("/data.json")
-    .then((response) => response.json())
-    .then((data) => {
-      items = data;
-      render(items);
-    });
+window.addEventListener("load", async () => {
+  const result = await fetch("/data.json");
+  const data = await result.json();
+
+  items = data;
+  render(items);
+
   if (localStorage.getItem("cart")) {
     console.log("hello");
+    console.log(items);
     cartArray = JSON.parse(localStorage.getItem("cart"));
     console.log(cartArray);
     cartRender();
