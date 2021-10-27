@@ -1,10 +1,4 @@
 let items;
-fetch("/data.json")
-  .then((response) => response.json())
-  .then((data) => {
-    items = data;
-    render(items);
-  });
 
 const appItems = document.querySelector("#app-items");
 const cartIcon = document.querySelector(".cartIcon i");
@@ -64,6 +58,7 @@ function cartRender() {
     container.append(cartItem);
     cartTag.append(container);
     console.log(cart);
+    localStorage.setItem("cart", JSON.stringify(cartArray));
   });
 }
 
@@ -92,7 +87,7 @@ function render() {
       let quantityContainer = createEl("span", "quantityContainer");
       let aTag = createEl("a", "link");
 
-      aTag.href = `/index2.html?product=${item.id}`;
+      aTag.href = `/singleProduct.html?product=${item.id}`;
       incBtnplus.textContent = "+";
       incBtnminus.textContent = "-";
 
@@ -127,6 +122,7 @@ function render() {
         console.log(item.id, select.value, "cartArray:", cartArray);
         cartIcon.textContent = cartArray.length;
         cartRender(cartArray, items);
+        localStorage.setItem("cart", JSON.stringify(cartArray));
       });
       quantityContainer.append(incBtnminus, select, incBtnplus);
       aTag.append(cardInfoName);
@@ -170,5 +166,19 @@ searchBtn.addEventListener("click", () => {
 searchInput.addEventListener("input", () => {
   if (!searchInput.value) {
     render();
+  }
+});
+window.addEventListener("load", () => {
+  fetch("/data.json")
+    .then((response) => response.json())
+    .then((data) => {
+      items = data;
+      render(items);
+    });
+  if (localStorage.getItem("cart")) {
+    console.log("hello");
+    cartArray = JSON.parse(localStorage.getItem("cart"));
+    console.log(cartArray);
+    cartRender();
   }
 });

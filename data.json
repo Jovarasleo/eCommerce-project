@@ -1,12 +1,120 @@
 [
-    {"name": "Asus TUF GAMING X570-PLUS (WI-FI)", "id":"1", "price":197.89, "pictures":["https://cdna.pcpartpicker.com/static/forever/images/product/8d7d0435e8a2af93b5d91a1a5dccd476.256p.jpg"], "quantity": 2, "description":""},
-    {"name": "Asus ROG STRIX B550-F GAMING (WI-FI)", "id":"2", "price":197.89, "pictures":["https://m.media-amazon.com/images/I/51xfJ2RkmKL.jpg"], "quantity": 2, "description":""},
-    {"name": "MSI MAG B550 TOMAHAWK", "id":"3", "price":197.89, "pictures":["https://cdna.pcpartpicker.com/static/forever/images/product/52ee465cbd64b16145232d863524c066.256p.jpg"], "quantity": 4, "description":""},
-    {"name": "MSI B550-A PRO", "id":"4", "price":197.89, "pictures":["https://cdna.pcpartpicker.com/static/forever/images/product/662aee2a85bbe3b7e12224e381e57d24.256p.jpg"], "quantity": 2, "description":""},
-    {"name": "ASRock B450M Pro4", "id":"5", "price":197.89, "pictures":["https://cdna.pcpartpicker.com/static/forever/images/product/8f8baff091bfd5ef531c7ddb1a602ca4.256p.jpg"], "quantity": 3, "description":""},
-    {"name": "Asus ROG STRIX B550-A GAMING", "id":"6", "price":197.89, "pictures":["https://cdna.pcpartpicker.com/static/forever/images/product/5ac88d84f61dd91c0621ac30c4dc5480.256p.jpg"], "quantity": 5, "description":""},
-    {"name": "Asus PRIME B560-PLUS", "id":"7", "price":197.89, "pictures":["https://cdna.pcpartpicker.com/static/forever/images/product/9ff7242b59122ddd64439dea6d70d194.256p.jpg"], "quantity": 2, "description":""},
-    {"name": "Asus ROG Strix X570-E Gaming", "id":"8", "price":197.89, "pictures":["https://cdna.pcpartpicker.com/static/forever/images/product/8edda8b2608b4fe4e5c3777f9e6df4fd.256p.jpg"], "quantity": 2, "description":""},
-    {"name": "MSI Z490-A PRO", "id":"9", "price":197.89, "pictures":["https://cdna.pcpartpicker.com/static/forever/images/product/20b2f4cc60ded2ad4529beae7b0dda14.256p.jpg"], "quantity": 7, "description":""},
-    {"name": "MSI B550M PRO-VDH WIFI", "id":"10", "price":197.89, "pictures":["https://cdna.pcpartpicker.com/static/forever/images/product/57b4a5399dc626e9c5786f786aeb94ac.256p.jpg"], "quantity": 2, "description":""},
-    {"name": "MSI B450 TOMAHAWK MAX", "id":"11", "price":197.89, "pictures":["https://cdna.pcpartpicker.com/static/forever/images/product/0a8a0ca77620c63b68fec6323537d50a.256p.jpg"], "quantity": 1, "description":""}]
+  {
+    "name": "Asus TUF GAMING X570-PLUS (WI-FI)",
+    "id": "1",
+    "price": 197.89,
+    "pictures": [
+      "https://cdna.pcpartpicker.com/static/forever/images/product/8d7d0435e8a2af93b5d91a1a5dccd476.256p.jpg"
+    ],
+    "quantity": 2,
+    "description": ""
+  },
+  {
+    "name": "Asus ROG STRIX B550-F GAMING (WI-FI)",
+    "id": "2",
+    "price": 197.89,
+    "pictures": ["https://m.media-amazon.com/images/I/51xfJ2RkmKL.jpg"],
+    "quantity": 2,
+    "description": ""
+  },
+  {
+    "name": "MSI MAG B550 TOMAHAWK",
+    "id": "3",
+    "price": 197.89,
+    "pictures": [
+      "https://cdna.pcpartpicker.com/static/forever/images/product/52ee465cbd64b16145232d863524c066.256p.jpg"
+    ],
+    "quantity": 4,
+    "description": ""
+  },
+  {
+    "name": "MSI B550-A PRO",
+    "id": "4",
+    "price": 197.89,
+    "pictures": [
+      "https://cdna.pcpartpicker.com/static/forever/images/product/662aee2a85bbe3b7e12224e381e57d24.256p.jpg"
+    ],
+    "quantity": 2,
+    "description": ""
+  },
+  {
+    "name": "ASRock B450M Pro4",
+    "id": "5",
+    "price": 197.89,
+    "pictures": [
+      "https://cdna.pcpartpicker.com/static/forever/images/product/8f8baff091bfd5ef531c7ddb1a602ca4.256p.jpg"
+    ],
+    "quantity": 3,
+    "description": ""
+  },
+  {
+    "name": "Asus ROG STRIX B550-A GAMING",
+    "id": "6",
+    "price": 197.89,
+    "pictures": [
+      "https://cdna.pcpartpicker.com/static/forever/images/product/5ac88d84f61dd91c0621ac30c4dc5480.256p.jpg"
+    ],
+    "quantity": 5,
+    "description": ""
+  },
+  {
+    "name": "Asus PRIME B560-PLUS",
+    "id": "7",
+    "price": 197.89,
+    "pictures": [
+      "https://cdna.pcpartpicker.com/static/forever/images/product/9ff7242b59122ddd64439dea6d70d194.256p.jpg"
+    ],
+    "quantity": 2,
+    "description": ""
+  },
+  {
+    "name": "Asus ROG Strix X570-E Gaming",
+    "id": "8",
+    "price": 197.89,
+    "pictures": [
+      "https://cdna.pcpartpicker.com/static/forever/images/product/8edda8b2608b4fe4e5c3777f9e6df4fd.256p.jpg"
+    ],
+    "quantity": 2,
+    "description": ""
+  },
+  {
+    "name": "MSI Z490-A PRO",
+    "id": "9",
+    "price": 197.89,
+    "pictures": [
+      "https://cdna.pcpartpicker.com/static/forever/images/product/20b2f4cc60ded2ad4529beae7b0dda14.256p.jpg"
+    ],
+    "quantity": 7,
+    "description": ""
+  },
+  {
+    "name": "MSI B550M PRO-VDH WIFI",
+    "id": "10",
+    "price": 197.89,
+    "pictures": [
+      "https://cdna.pcpartpicker.com/static/forever/images/product/57b4a5399dc626e9c5786f786aeb94ac.256p.jpg"
+    ],
+    "quantity": 2,
+    "description": ""
+  },
+  {
+    "name": "MSI B450 TOMAHAWK MAX",
+    "id": "11",
+    "price": 197.89,
+    "pictures": [
+      "https://cdna.pcpartpicker.com/static/forever/images/product/0a8a0ca77620c63b68fec6323537d50a.256p.jpg"
+    ],
+    "quantity": 1,
+    "description": ""
+  },
+  {
+    "name": "Gigabyte X570 AORUS ELITE WIFI ATX",
+    "id": "1735478952",
+    "price": 247.89,
+    "pictures": [
+      "https://cdna.pcpartpicker.com/static/forever/images/product/920123df323bf6d2b80994b4f4bb6f4b.256p.jpg"
+    ],
+    "quantity": 1,
+    "description": ""
+  }
+]
