@@ -210,7 +210,7 @@ searchBtn.addEventListener("click", () => {
 searchInput.addEventListener("input", () => {
   if (!searchInput.value) {
     render();
-    location.href = "/index.html?search=";
+    location.href = "/index.html";
   }
 });
 window.addEventListener("load", async () => {
