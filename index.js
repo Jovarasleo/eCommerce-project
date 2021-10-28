@@ -15,6 +15,13 @@ function createEl(type, elClass) {
 }
 //function to render cart items
 function cartRender() {
+  let cartPageAtag = createEl("a", "toCartPagetag");
+  let toCartPage = createEl("button", "toCartPage");
+  toCartPage.textContent = "buy";
+  cartPageAtag.href = "/cart.html";
+  cartPageAtag.append(toCartPage);
+  let totalPriceContainer = createEl("div", "totalPrice");
+  let totalPrice = 0;
   let container =
     cartTag.querySelector(".cartContainer") || createEl("div", "cartContainer");
   if (container !== null && container !== "") {
@@ -30,11 +37,14 @@ function cartRender() {
     let cartImg = createEl("img", "cartItemImg");
     let cartInfoName = createEl("p", "cartitemName");
     let cartInfoPrice = createEl("span", "cartitemPrice");
-    let removeBtn = createEl("button", "removeBtn");
+    let removeBtn = createEl("div", "removeBtn");
     let select = createEl("input", "selectQuantity");
     let incBtnplus = createEl("button", "selectinc");
     let incBtnminus = createEl("button", "selectdec");
     let quantityContainer = createEl("span", "quantityContainer");
+    let aTag = createEl("a", "link");
+    let itemPrice = 0;
+    aTag.href = `/singleProduct.html?product=${item.id}`;
 
     incBtnplus.textContent = "+";
     incBtnminus.textContent = "-";
@@ -43,11 +53,13 @@ function cartRender() {
       incrementValue(select, item.quantity);
       cartArray[realIndex].quantity = Number(select.value);
       localStorage.setItem("cart", JSON.stringify(cartArray));
+      cartRender();
     });
     incBtnminus.addEventListener("click", () => {
       decrementValue(select);
       cartArray[realIndex].quantity = Number(select.value);
       localStorage.setItem("cart", JSON.stringify(cartArray));
+      cartRender();
     });
 
     if (item.thumbnail) {
@@ -69,7 +81,7 @@ function cartRender() {
         return (select.value = item.quantity);
       } else return (select.value = cartArray[realIndex].quantity);
     }
-    removeBtn.textContent = "remove";
+    removeBtn.innerHTML = "<i class='fal fa-times'></i>";
 
     removeBtn.addEventListener("click", () => {
       cartArray.splice(realIndex, 1);
@@ -77,20 +89,20 @@ function cartRender() {
       cartIcon.textContent = cartArray.length;
       cartRender();
     });
+    itemPrice = item.price * select.value;
+    totalPrice += itemPrice;
     quantityContainer.append(incBtnminus, select, incBtnplus);
-    cartItem.append(
-      cartImg,
-      cartInfoName,
-      cartInfoPrice,
-      removeBtn,
-      quantityContainer
-    );
-    container.append(cartItem);
+    aTag.append(cartInfoName);
+    cartItem.append(cartImg, aTag, cartInfoPrice, removeBtn, quantityContainer);
+    container.append(cartItem, totalPriceContainer);
     cartTag.append(container);
-    console.log(cart);
     localStorage.setItem("cart", JSON.stringify(cartArray));
     cartIcon.textContent = cartArray.length;
   });
+  totalPriceContainer.append(
+    `Total sum: ${Math.round(totalPrice * 100) / 100}`,
+    cartPageAtag
+  );
 }
 
 //function to render all items in the main page
@@ -141,7 +153,6 @@ function render() {
       cartIcon.textContent = 0;
       toCart.addEventListener("click", () => {
         if (select.value > 0 && select.value <= item.quantity) {
-          console.log(item.id);
           if (cartArray.some((o) => o.id == item.id)) {
             cartArray.find((o) => o.id == item.id).quantity += Number(
               select.value
@@ -150,7 +161,6 @@ function render() {
             cartArray.push({ id: item.id, quantity: Number(select.value) });
           }
         }
-        console.log(item.id, select.value, "cartArray:", cartArray);
         cartIcon.textContent = cartArray.length;
         cartRender(cartArray, items);
         localStorage.setItem("cart", JSON.stringify(cartArray));
@@ -169,10 +179,7 @@ function render() {
       }
     });
 }
-//hide
-cartIcon.addEventListener("click", () => {
-  cartTag.classList.toggle("is-active");
-});
+
 //increase decrease functions to select quantity
 function incrementValue(select, quantity) {
   var value = parseInt(select.value, quantity);
@@ -183,7 +190,6 @@ function incrementValue(select, quantity) {
   }
 }
 function decrementValue(select) {
-  console.log("function fires");
   var value = parseInt(select.value);
   value = isNaN(value) ? 0 : value;
   if (value > 1) {
@@ -213,10 +219,7 @@ window.addEventListener("load", async () => {
   render(items);
 
   if (localStorage.getItem("cart")) {
-    console.log("hello");
-    console.log(items);
     cartArray = JSON.parse(localStorage.getItem("cart"));
-    console.log(cartArray);
     cartRender();
   }
 });

@@ -7,7 +7,6 @@ const searchBtn = document.querySelector(".searchBtn");
 
 let cartArray = [];
 let id = location.href.split("=")[1];
-console.log(id);
 
 function createEl(type, elClass) {
   const element = document.createElement(type);
@@ -22,10 +21,7 @@ window.addEventListener("load", async () => {
   render(items[id]);
 
   if (localStorage.getItem("cart")) {
-    console.log("hello");
-    console.log(items);
     cartArray = JSON.parse(localStorage.getItem("cart"));
-    console.log(cartArray);
     cartRender();
   }
 });
@@ -69,7 +65,6 @@ function render() {
   toCart.textContent = "Add to cart";
   toCart.addEventListener("click", () => {
     if (select.value > 0 && select.value <= items[realIndex].quantity) {
-      console.log(items[realIndex].id);
       if (cartArray.some((o) => o.id == items[realIndex].id)) {
         cartArray.find((o) => o.id == items[realIndex].id).quantity += Number(
           select.value
@@ -81,7 +76,6 @@ function render() {
         });
       }
     }
-    console.log(items[realIndex].id, select.value, "cartArray:", cartArray);
     cartIcon.textContent = cartArray.length;
     cartRender(cartArray, items[realIndex]);
     localStorage.setItem("cart", JSON.stringify(cartArray));
@@ -101,7 +95,6 @@ function render() {
   //gallery sectiom
   if (items[realIndex].pictures.length) {
     cardImg.src = items[realIndex].pictures[0];
-    console.log(items[realIndex].pictures);
   } else if (items[realIndex].thumbnail) {
     cardImg.src = items[realIndex].thumbnail;
   } else {
@@ -138,6 +131,13 @@ function render() {
 }
 //function to render all objects added to cartArray
 function cartRender() {
+  let cartPageAtag = createEl("a", "toCartPagetag");
+  let toCartPage = createEl("button", "toCartPage");
+  toCartPage.textContent = "buy";
+  cartPageAtag.href = "/cart.html";
+  cartPageAtag.append(toCartPage);
+  let totalPriceContainer = createEl("div", "totalPrice");
+  let totalPrice = 0;
   let container =
     cartTag.querySelector(".cartContainer") || createEl("div", "cartContainer");
   if (container !== null && container !== "") {
@@ -153,11 +153,15 @@ function cartRender() {
     let cartImg = createEl("img", "cartItemImg");
     let cartInfoName = createEl("p", "cartitemName");
     let cartInfoPrice = createEl("span", "cartitemPrice");
-    let removeBtn = createEl("button", "removeBtn");
+    let removeBtn = createEl("div", "removeBtn");
     let select = createEl("input", "selectQuantity");
     let incBtnplus = createEl("button", "selectinc");
     let incBtnminus = createEl("button", "selectdec");
     let quantityContainer = createEl("span", "quantityContainer");
+    let itemPrice = 0;
+    let aTag = createEl("a", "link");
+
+    aTag.href = `/singleProduct.html?product=${item.id}`;
 
     incBtnplus.textContent = "+";
     incBtnminus.textContent = "-";
@@ -175,11 +179,13 @@ function cartRender() {
       incrementValue(select, items[realIndex].quantity);
       cartArray[realIndex].quantity = Number(select.value);
       localStorage.setItem("cart", JSON.stringify(cartArray));
+      cartRender();
     });
     incBtnminus.addEventListener("click", () => {
       decrementValue(select);
       cartArray[realIndex].quantity = Number(select.value);
       localStorage.setItem("cart", JSON.stringify(cartArray));
+      cartRender();
     });
 
     select.type = "number";
@@ -191,7 +197,7 @@ function cartRender() {
         return (select.value = item.quantity);
       } else return (select.value = cartArray[realIndex].quantity);
     }
-    removeBtn.textContent = "remove";
+    removeBtn.innerHTML = "<i class='fal fa-times'></i>";
 
     removeBtn.addEventListener("click", () => {
       cartArray.splice(realIndex, 1);
@@ -199,25 +205,21 @@ function cartRender() {
       cartIcon.textContent = cartArray.length;
       cartRender();
     });
+    itemPrice = item.price * select.value;
+    totalPrice += itemPrice;
     quantityContainer.append(incBtnminus, select, incBtnplus);
-    cartItem.append(
-      cartImg,
-      cartInfoName,
-      cartInfoPrice,
-      removeBtn,
-      quantityContainer
-    );
-    container.append(cartItem);
+    aTag.append(cartInfoName);
+    cartItem.append(cartImg, aTag, cartInfoPrice, removeBtn, quantityContainer);
+    container.append(cartItem, totalPriceContainer);
     cartTag.append(container);
-    console.log(cart);
     localStorage.setItem("cart", JSON.stringify(cartArray));
     cartIcon.textContent = cartArray.length;
   });
+  totalPriceContainer.append(
+    `Total sum: ${totalPrice.toFixed(2)}`,
+    cartPageAtag
+  );
 }
-//hide
-cartIcon.addEventListener("click", () => {
-  cartTag.classList.toggle("is-active");
-});
 //increase decrease functions to select quantity
 function incrementValue(select, quantity) {
   var value = parseInt(select.value, quantity);
