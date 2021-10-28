@@ -202,15 +202,17 @@ function decrementValue(select) {
 document.addEventListener("keydown", (event) => {
   if (event.key === "Enter") {
     render();
+    history.replaceState({}, null, `/index.html?search=${searchInput.value}`);
   }
 });
 searchBtn.addEventListener("click", () => {
   render();
+  history.replaceState({}, null, `/index.html?search=${searchInput.value}`);
 });
 searchInput.addEventListener("input", () => {
   if (!searchInput.value) {
     render();
-    location.href = "/index.html";
+    history.replaceState({}, null, `/index.html?search=${searchInput.value}`);
   }
 });
 window.addEventListener("load", async () => {
