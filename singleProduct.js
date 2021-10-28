@@ -4,10 +4,10 @@ const body = document.querySelector("body");
 const cartTag = document.querySelector(".cart");
 const searchInput = document.querySelector(".searchInput");
 const searchBtn = document.querySelector(".searchBtn");
-
+const searchTag = document.querySelector(".searchTag");
 let cartArray = [];
 let id = location.href.split("=")[1];
-
+console.log(id);
 function createEl(type, elClass) {
   const element = document.createElement(type);
   element.classList = elClass;
@@ -216,7 +216,7 @@ function cartRender() {
     cartIcon.textContent = cartArray.length;
   });
   totalPriceContainer.append(
-    `Total sum: ${totalPrice.toFixed(2)}`,
+    `Total sum: ${Math.round(totalPrice * 100) / 100}`,
     cartPageAtag
   );
 }
@@ -237,3 +237,12 @@ function decrementValue(select) {
     select.value = value;
   }
 }
+//eventlisteners to filter search results
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Enter") {
+    location.href = `/index.html?search=${searchInput.value}`;
+  }
+});
+searchBtn.addEventListener("click", () => {
+  searchTag.href = `/index.html?search=${searchInput.value}`;
+});

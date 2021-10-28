@@ -18,7 +18,6 @@ window.addEventListener("load", async () => {
   const data = await result.json();
 
   items = data;
-  cartRender(items[id]);
 
   if (localStorage.getItem("cart")) {
     cartArray = JSON.parse(localStorage.getItem("cart"));
@@ -40,14 +39,13 @@ function cartRender() {
     container.innerHTML = null;
     container.remove();
   }
-  if (!container.target) {
-    console.log("what");
-    displayItem.innerHTML = "Cart is empty";
-  }
 
   let cart = items.filter((item) =>
     cartArray.some((selectedItem) => selectedItem.id === item.id)
   );
+  if (!cart.length) {
+    displayItem.innerHTML = "Cart is empty";
+  }
   cart.forEach((item) => {
     const realIndex = cartArray.findIndex((obj) => obj.id === item.id);
     let cartItem = createEl("div", "cartItem");
@@ -120,4 +118,21 @@ function cartRender() {
     `Total sum: ${Math.round(totalPrice * 100) / 100}`,
     cartPageAtag
   );
+}
+//increase decrease functions to select quantity
+function incrementValue(select, quantity) {
+  var value = parseInt(select.value, quantity);
+  value = isNaN(value) ? 0 : value;
+  if (value < quantity) {
+    value++;
+    select.value = value;
+  }
+}
+function decrementValue(select) {
+  var value = parseInt(select.value);
+  value = isNaN(value) ? 0 : value;
+  if (value > 1) {
+    value--;
+    select.value = value;
+  }
 }

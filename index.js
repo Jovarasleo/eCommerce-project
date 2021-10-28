@@ -1,5 +1,5 @@
 let items;
-
+let id = location.href.split("=")[1];
 const appItems = document.querySelector("#app-items");
 const cartIcon = document.querySelector(".cartIcon i");
 const body = document.querySelector("body");
@@ -151,6 +151,7 @@ function render() {
       cardInfoPrice.textContent = `${item.price}$`;
       toCart.textContent = "Add to cart";
       cartIcon.textContent = 0;
+      cartIcon.textContent = cartArray.length;
       toCart.addEventListener("click", () => {
         if (select.value > 0 && select.value <= item.quantity) {
           if (cartArray.some((o) => o.id == item.id)) {
@@ -161,7 +162,7 @@ function render() {
             cartArray.push({ id: item.id, quantity: Number(select.value) });
           }
         }
-        cartIcon.textContent = cartArray.length;
+
         cartRender(cartArray, items);
         localStorage.setItem("cart", JSON.stringify(cartArray));
       });
@@ -209,6 +210,7 @@ searchBtn.addEventListener("click", () => {
 searchInput.addEventListener("input", () => {
   if (!searchInput.value) {
     render();
+    location.href = "/index.html?search=";
   }
 });
 window.addEventListener("load", async () => {
@@ -221,5 +223,9 @@ window.addEventListener("load", async () => {
   if (localStorage.getItem("cart")) {
     cartArray = JSON.parse(localStorage.getItem("cart"));
     cartRender();
+  }
+  if (id.length) {
+    searchInput.value = id;
+    render(items);
   }
 });
