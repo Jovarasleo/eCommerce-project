@@ -123,12 +123,24 @@ div#app-items div.itemCard span.quantityContainer {
 }
 span.quantityContainer button {
   border: none;
-  background-color: rgb(202, 202, 202);
-  width: 20px;
-  height: 26px;
+  background-color: rgb(109, 109, 109);
+  width: 24px;
+  color: white;
   border-radius: 0;
+  transition: 0.2s ease-in-out;
+}
+span.quantityContainer button:active {
+  background-color: #0050b9;
+}
+#app-items span.quantityContainer .selectdec {
+  border-radius: 10px 0 0 10px;
+}
+
+#app-items span.quantityContainer .selectinc {
+  border-radius: 0 10px 10px 0;
 }
 .selectQuantity {
+  border: none;
   width: 20px;
   height: 20px;
   text-align: center;
@@ -152,7 +164,11 @@ span.quantityContainer button {
   display: flex;
   flex-direction: column;
 }
-
+.toCart__Container {
+  width: 50%;
+  max-width: 800px;
+  margin: 0 auto;
+}
 .cart {
   z-index: 1;
   display: none;
@@ -224,6 +240,10 @@ span.quantityContainer button {
   justify-content: space-between;
   align-items: center;
   height: 40px;
+}
+#app-cart {
+  max-width: 1000px;
+  margin: 0 auto;
 }
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {

@@ -8,6 +8,10 @@ const searchInput = document.querySelector(".searchInput");
 const searchBtn = document.querySelector(".searchBtn");
 let cartArray = [];
 
+function renderAndUpdate() {
+  render();
+  history.replaceState({}, null, `/index.html?search=${searchInput.value}`);
+}
 function createEl(type, elClass) {
   const element = document.createElement(type);
   element.classList = elClass;
@@ -79,8 +83,15 @@ function cartRender() {
     function quantityCheck() {
       if (cartArray[realIndex].quantity > item.quantity) {
         return (select.value = item.quantity);
+      } else if (cartArray[realIndex].quantity < 1) {
+        return (select.value = 1);
       } else return (select.value = cartArray[realIndex].quantity);
     }
+    select.addEventListener("change", (event) => {
+      cartArray[realIndex].quantity = event.target.value;
+      localStorage.setItem("cart", JSON.stringify(cartArray));
+      cartRender();
+    });
     removeBtn.innerHTML = "<i class='fal fa-times'></i>";
 
     removeBtn.addEventListener("click", () => {
@@ -183,7 +194,7 @@ function render() {
 
 //increase decrease functions to select quantity
 function incrementValue(select, quantity) {
-  var value = parseInt(select.value, quantity);
+  var value = Number(select.value, quantity);
   value = isNaN(value) ? 0 : value;
   if (value < quantity) {
     value++;
@@ -191,7 +202,7 @@ function incrementValue(select, quantity) {
   }
 }
 function decrementValue(select) {
-  var value = parseInt(select.value);
+  var value = Number(select.value);
   value = isNaN(value) ? 0 : value;
   if (value > 1) {
     value--;
@@ -199,20 +210,17 @@ function decrementValue(select) {
   }
 }
 //eventlisteners to filter search results
-document.addEventListener("keydown", (event) => {
+document.querySelector("nav").addEventListener("keydown", (event) => {
   if (event.key === "Enter") {
-    render();
-    history.replaceState({}, null, `/index.html?search=${searchInput.value}`);
+    renderAndUpdate();
   }
 });
 searchBtn.addEventListener("click", () => {
-  render();
-  history.replaceState({}, null, `/index.html?search=${searchInput.value}`);
+  renderAndUpdate();
 });
 searchInput.addEventListener("input", () => {
   if (!searchInput.value) {
-    render();
-    history.replaceState({}, null, `/index.html?search=${searchInput.value}`);
+    renderAndUpdate();
   }
 });
 window.addEventListener("load", async () => {
@@ -226,7 +234,7 @@ window.addEventListener("load", async () => {
     cartArray = JSON.parse(localStorage.getItem("cart"));
     cartRender();
   }
-  if (id.length) {
+  if (id) {
     searchInput.value = id;
     render(items);
   }

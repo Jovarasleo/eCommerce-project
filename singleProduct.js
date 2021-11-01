@@ -34,6 +34,7 @@ function render() {
   let cardInfoName = createEl("p", "itemName");
   let cardInfoPrice = createEl("span", "itemPrice");
   let cardInfoQuantity = createEl("span", "itemQuantity");
+  let toCartContainer = createEl("div", "toCart__Container");
   let toCart = createEl("button", "toCartButton");
   let select = createEl("input", "selectQuantity");
   let incBtnplus = createEl("button", "selectinc");
@@ -83,13 +84,14 @@ function render() {
   //
   //append section
   quantityContainer.append(incBtnminus, select, incBtnplus);
+  toCartContainer.append(quantityContainer, toCart);
   aTag.append(cardInfoName);
   cardInfo.append(aTag, cardInfoPrice, cardInfoQuantity);
   imageContainer.append(cardImg);
   if (items[realIndex].pictures.length > 1) {
     imageContainer.append(arrowRight, arrowLeft);
   }
-  card.append(imageContainer, cardInfo, quantityContainer, toCart);
+  card.append(imageContainer, cardInfo, toCartContainer);
   displayItem.appendChild(card);
 
   //gallery sectiom
@@ -195,8 +197,15 @@ function cartRender() {
     function quantityCheck() {
       if (cartArray[realIndex].quantity > item.quantity) {
         return (select.value = item.quantity);
+      } else if (cartArray[realIndex].quantity < 1) {
+        return (select.value = 1);
       } else return (select.value = cartArray[realIndex].quantity);
     }
+    select.addEventListener("change", (event) => {
+      cartArray[realIndex].quantity = event.target.value;
+      localStorage.setItem("cart", JSON.stringify(cartArray));
+      cartRender();
+    });
     removeBtn.innerHTML = "<i class='fal fa-times'></i>";
 
     removeBtn.addEventListener("click", () => {
@@ -222,7 +231,7 @@ function cartRender() {
 }
 //increase decrease functions to select quantity
 function incrementValue(select, quantity) {
-  var value = parseInt(select.value, quantity);
+  var value = Number(select.value, quantity);
   value = isNaN(value) ? 0 : value;
   if (value < quantity) {
     value++;
@@ -230,7 +239,7 @@ function incrementValue(select, quantity) {
   }
 }
 function decrementValue(select) {
-  var value = parseInt(select.value);
+  var value = Number(select.value);
   value = isNaN(value) ? 0 : value;
   if (value > 1) {
     value--;
@@ -239,10 +248,11 @@ function decrementValue(select) {
 }
 //eventlisteners to filter search results
 document.addEventListener("keydown", (event) => {
-  if (event.key === "Enter") {
+  if (event.key === "Enter" && searchInput.value) {
     location.href = `/index.html?search=${searchInput.value}`;
   }
 });
 searchBtn.addEventListener("click", () => {
-  searchTag.href = `/index.html?search=${searchInput.value}`;
+  if (searchInput.value)
+    searchTag.href = `/index.html?search=${searchInput.value}`;
 });

@@ -77,6 +77,11 @@ function cartRender() {
       cartRender();
     });
 
+    select.addEventListener("change", (event) => {
+      cartArray[realIndex].quantity = event.target.value;
+      localStorage.setItem("cart", JSON.stringify(cartArray));
+      cartRender();
+    });
     if (item.thumbnail) {
       cartImg.src = item.thumbnail;
     } else if (item.pictures.length) {
@@ -94,8 +99,11 @@ function cartRender() {
     function quantityCheck() {
       if (cartArray[realIndex].quantity > item.quantity) {
         return (select.value = item.quantity);
+      } else if (cartArray[realIndex].quantity < 1) {
+        return (select.value = 1);
       } else return (select.value = cartArray[realIndex].quantity);
     }
+
     removeBtn.innerHTML = "<i class='fal fa-times'></i>";
 
     removeBtn.addEventListener("click", () => {
@@ -119,9 +127,13 @@ function cartRender() {
     cartPageAtag
   );
 }
+function renderForm() {
+  let form = createEl("form", "form");
+  let;
+}
 //increase decrease functions to select quantity
 function incrementValue(select, quantity) {
-  var value = parseInt(select.value, quantity);
+  var value = Number(select.value, quantity);
   value = isNaN(value) ? 0 : value;
   if (value < quantity) {
     value++;
@@ -129,7 +141,7 @@ function incrementValue(select, quantity) {
   }
 }
 function decrementValue(select) {
-  var value = parseInt(select.value);
+  var value = Number(select.value);
   value = isNaN(value) ? 0 : value;
   if (value > 1) {
     value--;
