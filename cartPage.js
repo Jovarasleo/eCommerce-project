@@ -4,7 +4,9 @@ const body = document.querySelector("body");
 const cartTag = document.querySelector(".cart");
 const searchInput = document.querySelector(".searchInput");
 const searchBtn = document.querySelector(".searchBtn");
+const form = document.querySelector(".userInfoForm");
 
+let checkoutArr = [];
 let cartArray = [];
 let id = location.href.split("=")[1];
 
@@ -27,8 +29,8 @@ window.addEventListener("load", async () => {
 function cartRender() {
   let cartPageAtag = createEl("a", "toCartPagetag");
   let toCartPage = createEl("button", "toCartPage");
-  toCartPage.textContent = "buy";
-  cartPageAtag.href = "/cart.html";
+  toCartPage.textContent = "To Check Out";
+  cartPageAtag.href = "/checkout.html";
   cartPageAtag.append(toCartPage);
   let totalPriceContainer = createEl("div", "totalPrice");
   let totalPrice = 0;
@@ -63,6 +65,12 @@ function cartRender() {
 
     incBtnplus.textContent = "+";
     incBtnminus.textContent = "-";
+
+    toCartPage.addEventListener("click", () => {
+      checkoutArr.push({ id: item.id, quantity: Number(select.value) });
+      localStorage.setItem("checkout", JSON.stringify(checkoutArr));
+      console.log(checkoutArr);
+    });
 
     incBtnplus.addEventListener("click", () => {
       incrementValue(select, item.quantity);
@@ -127,10 +135,7 @@ function cartRender() {
     cartPageAtag
   );
 }
-function renderForm() {
-  let form = createEl("form", "form");
-  let;
-}
+
 //increase decrease functions to select quantity
 function incrementValue(select, quantity) {
   var value = Number(select.value, quantity);

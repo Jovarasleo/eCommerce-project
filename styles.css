@@ -1,6 +1,11 @@
 * {
   font-family: "Roboto Slab", serif;
 }
+html {
+  overflow: -moz-scrollbars-vertical;
+  overflow-y: scroll;
+  height: 100vh;
+}
 body {
   margin: 0;
 }
@@ -79,7 +84,7 @@ div#app-items div.itemCard span.quantityContainer {
   margin: 0 auto;
 }
 #app-item .itemCard {
-  background-color: rgb(209, 209, 209);
+  /* background-color: rgb(209, 209, 209); */
   border-radius: 15px;
   padding-bottom: 2rem;
 }
@@ -100,7 +105,7 @@ div#app-items div.itemCard span.quantityContainer {
   max-width: 800px;
 }
 .arrowRight {
-  background-image: url("/assets/icons/arrow-right.png");
+  background-image: url("/assets/icons/arrow-right1.png");
   background-position: center;
   background-repeat: no-repeat;
   position: absolute;
@@ -109,9 +114,10 @@ div#app-items div.itemCard span.quantityContainer {
   transform: translate(0, -50%);
   width: 55px;
   height: 65px;
+  cursor: pointer;
 }
 .arrowLeft {
-  background-image: url("/assets/icons/arrow-left.png");
+  background-image: url("/assets/icons/arrow-left1.png");
   background-position: center;
   background-repeat: no-repeat;
   position: absolute;
@@ -120,6 +126,7 @@ div#app-items div.itemCard span.quantityContainer {
   transform: translate(0, -50%);
   width: 55px;
   height: 65px;
+  cursor: pointer;
 }
 span.quantityContainer button {
   border: none;
@@ -138,6 +145,32 @@ span.quantityContainer button:active {
 
 #app-items span.quantityContainer .selectinc {
   border-radius: 0 10px 10px 0;
+}
+.description {
+  background: #fff;
+  overflow: hidden;
+  transition: all 0.5s ease-in-out;
+  line-height: 0;
+  padding: 0 1em;
+  color: transparent;
+  font-weight: 600;
+}
+.descriptionShow {
+  line-height: 1.5;
+  padding-top: 1em;
+  padding-bottom: 1em;
+  color: black;
+}
+.descriptionBtn {
+  color: white;
+  background-color: rgb(95, 95, 95);
+  border: none;
+  border-radius: 5px;
+  transition: 0.2s ease-in-out;
+  cursor: pointer;
+}
+.active--button {
+  background-color: #0050b9;
 }
 .selectQuantity {
   border: none;
@@ -160,6 +193,11 @@ span.quantityContainer button:active {
   background-color: white;
   color: rgb(53, 53, 53);
 }
+.toCartButton:active {
+  transition: none;
+  color: #0050b9;
+  font-weight: bold;
+}
 .info-container {
   display: flex;
   flex-direction: column;
@@ -179,6 +217,8 @@ span.quantityContainer button:active {
   border-radius: 0 0 5px 5px;
   border-left: 2px grey solid;
   border-bottom: 2px grey solid;
+  max-height: 800px;
+  overflow-y: scroll;
 }
 .cartItem {
   height: 120px;
@@ -244,6 +284,66 @@ span.quantityContainer button:active {
 #app-cart {
   max-width: 1000px;
   margin: 0 auto;
+}
+.form {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  margin-left: 40px;
+}
+#checkout-app {
+  display: flex;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+.checkoutInfo__Container {
+  display: flex;
+  padding-bottom: 10px;
+  border-bottom: 1px solid black;
+}
+.checkoutInfo__Quantity {
+  width: 80px;
+}
+.checkoutInfo__Price {
+  margin-right: 0;
+  margin-left: auto;
+}
+.checkoutInfo__Container:nth-child(2) {
+  width: 80px;
+}
+.checkoutInfo__Container:nth-child(3) {
+  width: 80px;
+}
+.Container {
+  width: 50%;
+}
+.checkoutContainer {
+  height: 200px;
+  max-height: 200px;
+  overflow-y: scroll;
+}
+.Quantity {
+  display: flex;
+  width: 80px;
+}
+.Container .totalPrice {
+  margin-top: 20px;
+}
+.checkoutItem {
+  display: flex;
+  margin-right: 5px;
+  align-items: center;
+  overflow-wrap: normal;
+}
+.checkoutItem:nth-last-child() {
+  border-bottom: 1px darkgrey solid;
+}
+.checkoutitemName {
+  margin: 0;
+}
+.checkoutitemPrice {
+  margin-left: auto;
+  margin-right: 0;
 }
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {

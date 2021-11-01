@@ -42,8 +42,14 @@ function render() {
   let quantityContainer = createEl("span", "quantityContainer");
   let aTag = createEl("a", "link");
   let imageContainer = createEl("div", "image__Container");
+  let descriptionContainer = createEl("div", "description__Container");
+  let descriptionP = createEl("h4", "description");
+  let descriptionBtn = createEl("button", "descriptionBtn");
   let arrowRight = createEl("div", "arrowRight");
   let arrowLeft = createEl("div", "arrowLeft");
+
+  descriptionP.textContent = items[realIndex].description;
+  descriptionBtn.textContent = "Overview";
 
   incBtnplus.textContent = "+";
   incBtnminus.textContent = "-";
@@ -85,8 +91,12 @@ function render() {
   //append section
   quantityContainer.append(incBtnminus, select, incBtnplus);
   toCartContainer.append(quantityContainer, toCart);
+  descriptionContainer.appendChild(descriptionP);
   aTag.append(cardInfoName);
-  cardInfo.append(aTag, cardInfoPrice, cardInfoQuantity);
+  cardInfo.append(aTag, descriptionContainer, cardInfoPrice, cardInfoQuantity);
+  if (items[realIndex].description) {
+    cardInfo.insertBefore(descriptionBtn, descriptionContainer);
+  }
   imageContainer.append(cardImg);
   if (items[realIndex].pictures.length > 1) {
     imageContainer.append(arrowRight, arrowLeft);
@@ -129,6 +139,10 @@ function render() {
   });
   arrowLeft.addEventListener("click", () => {
     previousImage();
+  });
+  descriptionBtn.addEventListener("click", () => {
+    descriptionP.classList.toggle("descriptionShow");
+    descriptionBtn.classList.toggle("active--button");
   });
 }
 //function to render all objects added to cartArray
