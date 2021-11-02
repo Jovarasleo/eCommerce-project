@@ -85,6 +85,8 @@ function checkoutRender() {
   form.method = "get";
   Submit.type = "submit";
   Submit.textContent = "Order";
+  inputName.minLength = "2";
+  inputLName.minLength = "2";
   labelEmail.textContent = "Email:";
   inputEmail.type = "email";
   inputPhone.type = "tel";
@@ -119,13 +121,24 @@ function checkoutRender() {
     inputDelivery,
     Submit
   );
+  function validateEmail() {
+    if (inputEmail.value.match(mailformat)) {
+      return inputEmail.value;
+    }
+  }
+  function validateName() {
+    if (inputName.value.length > 1) {
+      return inputName.value;
+    }
+  }
+  function validateLName() {
+    if (inputLName.value.length > 1) {
+      return inputLName.value;
+    }
+  }
   form.addEventListener("submit", (event) => {
     event.preventDefault();
-    if (
-      inputEmail.value.match(mailformat) &&
-      inputName.value.length > 2 &&
-      inputLName.value.length > 2
-    ) {
+    if (validateEmail() && validateName() && validateLName()) {
       checkoutArr = [];
       cartArray = [];
       cartIcon.textContent = cartArray.length;

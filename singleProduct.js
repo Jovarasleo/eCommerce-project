@@ -31,7 +31,7 @@ function toLocal() {
   cartRender();
 }
 function incrementValue(select, quantity) {
-  var value = Number(select.value, quantity);
+  let value = Number(select.value, quantity);
   value = isNaN(value) ? 0 : value;
   if (value < quantity) {
     value++;
@@ -39,7 +39,7 @@ function incrementValue(select, quantity) {
   }
 }
 function decrementValue(select) {
-  var value = Number(select.value);
+  let value = Number(select.value);
   value = isNaN(value) ? 0 : value;
   if (value > 1) {
     value--;
@@ -142,6 +142,16 @@ function render() {
   arrowLeft.addEventListener("click", () => {
     previousImage();
   });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "ArrowRight") {
+      nextImage();
+    }
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "ArrowLeft") {
+      previousImage();
+    }
+  });
   descriptionBtn.addEventListener("click", () => {
     descriptionP.classList.toggle("descriptionShow");
     descriptionBtn.classList.toggle("active--button");
@@ -165,7 +175,7 @@ function render() {
 function cartRender() {
   let cartPageAtag = createEl("a", "toCartPagetag");
   let toCartPage = createEl("button", "toCartPage");
-  toCartPage.textContent = "To order";
+  toCartPage.textContent = "View cart";
   cartPageAtag.href = "/cart.html";
   cartPageAtag.append(toCartPage);
   let totalPriceContainer = createEl("div", "totalPrice");
@@ -215,10 +225,6 @@ function cartRender() {
       toLocal();
     });
 
-    select.type = "number";
-    select.min = 1;
-    select.max = item.quantity;
-    select.value = quantityCheck();
     function quantityCheck() {
       if (cartArray[realIndex].quantity > item.quantity) {
         return (select.value = item.quantity);
@@ -226,6 +232,12 @@ function cartRender() {
         return (select.value = 1);
       } else return (select.value = cartArray[realIndex].quantity);
     }
+
+    select.type = "number";
+    select.min = 1;
+    select.max = item.quantity;
+    select.value = quantityCheck();
+
     select.addEventListener("change", (event) => {
       cartArray[realIndex].quantity = event.target.value;
       toLocal();
@@ -253,7 +265,7 @@ function cartRender() {
   );
 }
 
-//eventlisteners to filter search results
+//filter search results
 document.addEventListener("keydown", (event) => {
   if (event.key === "Enter" && searchInput.value) {
     location.href = `/index.html?search=${searchInput.value}`;

@@ -32,7 +32,7 @@ function toLocal() {
   cartRender();
 }
 function incrementValue(select, quantity) {
-  var value = Number(select.value, quantity);
+  let value = Number(select.value, quantity);
   value = isNaN(value) ? 0 : value;
   if (value < quantity) {
     value++;
@@ -40,7 +40,7 @@ function incrementValue(select, quantity) {
   }
 }
 function decrementValue(select) {
-  var value = Number(select.value);
+  let value = Number(select.value);
   value = isNaN(value) ? 0 : value;
   if (value > 1) {
     value--;

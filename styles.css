@@ -9,10 +9,44 @@ html {
 body {
   margin: 0;
 }
+form input {
+  border: 1px rgb(112, 112, 112) solid;
+  border-radius: 5px;
+}
+form input:invalid {
+  border: none;
+  box-shadow: 0 0 4px 2px rgb(0, 104, 144);
+}
+form select {
+  border: 1px rgb(112, 112, 112) solid;
+  border-radius: 5px;
+}
+form button {
+  color: white;
+  background-color: rgb(95, 95, 95);
+  width: 50%;
+  border: none;
+  padding: 5px;
+  border-radius: 5px;
+  transition: 0.2s ease-in-out;
+  cursor: pointer;
+  margin-top: 20px;
+  margin-left: auto;
+  margin-right: 0;
+}
+form button:hover {
+  background-color: rgb(0, 104, 144);
+  color: white;
+}
+form button:active {
+  background-color: white;
+  color: rgb(0, 104, 144);
+}
 .app-container {
   width: 80%;
   margin: auto;
   padding-top: 100px;
+  padding-bottom: 100px;
 }
 .navbar {
   position: fixed;
@@ -78,9 +112,14 @@ nav .searchBtn {
 }
 #app-items .itemCard {
   background-color: white;
-  border: 1px solid grey;
+  border: 1px solid rgb(156, 156, 156);
   padding: 10px;
   border-radius: 5px;
+  transition: 0.2s;
+}
+#app-items .itemCard:hover {
+  box-shadow: 0px 2px 8px grey;
+  margin-top: -2px;
 }
 #app-items .itemImg {
   width: 100%;
@@ -358,6 +397,9 @@ span.quantityContainer button:active {
 }
 .Container {
   width: 50%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
 }
 .checkoutContainer {
   height: 200px;
@@ -389,6 +431,12 @@ span.quantityContainer button:active {
 .checkoutitemPrice {
   margin-left: auto;
   margin-right: 0;
+}
+#checkout-app .totalPrice {
+  position: absolute;
+  bottom: 0;
+  padding: 0;
+  width: 100%;
 }
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
