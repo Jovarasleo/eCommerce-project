@@ -92,7 +92,7 @@ function render() {
   select.max = item.quantity;
   cardInfoQuantity.textContent = `Stock: ${item.quantity}`;
   cardInfoName.textContent = item.name;
-  cardInfoPrice.textContent = `${item.price}$`;
+  cardInfoPrice.textContent = `${item.price} €`;
   toCart.textContent = "Add to cart";
 
   toCart.addEventListener("click", () => {
@@ -212,7 +212,7 @@ function cartRender() {
     } else cartImg.src = "/assets/icons/no-image.png";
 
     cartInfoName.textContent = item.name;
-    cartInfoPrice.textContent = item.price;
+    cartInfoPrice.textContent = `${item.price} €`;
 
     incBtnplus.addEventListener("click", () => {
       incrementValue(select, item.quantity);
@@ -242,8 +242,8 @@ function cartRender() {
       cartArray[realIndex].quantity = event.target.value;
       toLocal();
     });
-    removeBtn.innerHTML = "<i class='fal fa-times'></i>";
 
+    removeBtn.innerHTML = "<i class='fal fa-times'></i>";
     removeBtn.addEventListener("click", () => {
       cartArray.splice(realIndex, 1);
       cartIcon.textContent = cartArray.length;

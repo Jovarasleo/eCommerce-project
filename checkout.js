@@ -171,7 +171,5 @@ function checkoutRender() {
     toLocal();
     cartIcon.textContent = cartArray.length;
   });
-  totalPriceContainer.append(
-    `Total sum: ${Math.round(totalPrice * 100) / 100} €`
-  );
+  totalPriceContainer.append(`Total: ${Math.round(totalPrice * 100) / 100} €`);
 }

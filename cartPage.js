@@ -100,7 +100,7 @@ function cartRender() {
     });
 
     cartInfoName.textContent = item.name;
-    cartInfoPrice.textContent = item.price;
+    cartInfoPrice.textContent = `${item.price} €`;
 
     select.type = "number";
     select.min = 1;
@@ -144,7 +144,7 @@ function cartRender() {
     cartIcon.textContent = cartArray.length;
   });
   totalPriceContainer.append(
-    `Total sum: ${Math.round(totalPrice * 100) / 100}`,
+    `Total: ${Math.round(totalPrice * 100) / 100} €`,
     cartPageAtag
   );
 }

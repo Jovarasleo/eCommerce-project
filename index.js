@@ -98,7 +98,7 @@ function render() {
 
       cardInfoQuantity.textContent = `Stock: ${item.quantity}`;
       cardInfoName.textContent = item.name;
-      cardInfoPrice.textContent = `${item.price}$`;
+      cardInfoPrice.textContent = `${item.price} €`;
       toCart.textContent = "Add to cart";
       cartIcon.textContent = 0;
       cartIcon.textContent = cartArray.length;
@@ -179,7 +179,7 @@ function cartRender() {
       cartImg.src = "/assets/icons/no-image.png";
     }
     cartInfoName.textContent = item.name;
-    cartInfoPrice.textContent = item.price;
+    cartInfoPrice.textContent = `${item.price} €`;
 
     function quantityCheck() {
       if (cartArray[realIndex].quantity > item.quantity) {
