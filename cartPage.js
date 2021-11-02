@@ -56,13 +56,8 @@ function cartRender() {
   cartPageAtag.append(toCartPage);
   let totalPriceContainer = createEl("div", "totalPrice");
   let totalPrice = 0;
-  let container =
-    displayItem.querySelector(".cartContainer") ||
-    createEl("div", "cartContainer");
-  if (container !== null && container !== "") {
-    container.innerHTML = null;
-    container.remove();
-  }
+  displayItem.innerHTML = "";
+  let container = createEl("div", "cartContainer");
 
   let cart = items.filter((item) =>
     cartArray.some((selectedItem) => selectedItem.id === item.id)
@@ -143,8 +138,8 @@ function cartRender() {
     quantityContainer.append(incBtnminus, select, incBtnplus);
     aTag.append(cartInfoName);
     cartItem.append(cartImg, aTag, cartInfoPrice, removeBtn, quantityContainer);
-    container.append(cartItem, totalPriceContainer);
-    displayItem.append(container);
+    container.append(cartItem);
+    displayItem.append(container, totalPriceContainer);
     localStorage.setItem("cart", JSON.stringify(cartArray));
     cartIcon.textContent = cartArray.length;
   });

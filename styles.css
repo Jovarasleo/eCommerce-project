@@ -17,11 +17,17 @@ body {
 .navbar {
   position: fixed;
   width: 100%;
-  background-color: grey;
+  background: rgb(135, 135, 135);
+  background: linear-gradient(
+    90deg,
+    rgba(135, 135, 135, 1) 28%,
+    rgba(0, 104, 144, 1) 79%
+  );
   height: 80px;
   display: flex;
   justify-content: center;
-  z-index: 1;
+  z-index: 2;
+  box-shadow: 0px 2px 10px 1px rgb(65, 65, 65);
 }
 nav {
   height: 80px;
@@ -30,14 +36,18 @@ nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 0 40px;
 }
-
+.icon {
+  color: #fff;
+  font-size: 2rem;
+}
 a {
   color: inherit;
   text-decoration: none;
 }
 a:hover {
-  color: #0050b9;
+  color: rgb(0, 104, 144);
 }
 nav .search input {
   width: 300px;
@@ -48,12 +58,16 @@ nav .search input {
   font-size: medium;
 }
 nav .searchBtn {
-  height: 30px;
+  margin-left: -36px;
   border: none;
+  color: rgb(0, 104, 144);
   border-radius: 10px;
   text-align: center;
-  font-size: medium;
+  font-size: 1.2rem;
+  cursor: pointer;
+  background-color: white;
 }
+
 #app-items {
   margin: auto;
   display: grid;
@@ -137,7 +151,7 @@ span.quantityContainer button {
   transition: 0.2s ease-in-out;
 }
 span.quantityContainer button:active {
-  background-color: #0050b9;
+  background-color: rgb(0, 104, 144);
 }
 #app-items span.quantityContainer .selectdec {
   border-radius: 10px 0 0 10px;
@@ -170,7 +184,7 @@ span.quantityContainer button:active {
   cursor: pointer;
 }
 .active--button {
-  background-color: #0050b9;
+  background-color: rgb(0, 104, 144);
 }
 .selectQuantity {
   border: none;
@@ -195,7 +209,7 @@ span.quantityContainer button:active {
 }
 .toCartButton:active {
   transition: none;
-  color: #0050b9;
+  color: rgb(0, 104, 144);
   font-weight: bold;
 }
 .info-container {
@@ -209,22 +223,43 @@ span.quantityContainer button:active {
 }
 .cart {
   z-index: 1;
-  display: none;
+  display: flex;
   position: fixed;
-  right: 0;
+  right: -500px;
   top: 80px;
   background-color: rgb(196, 196, 196);
   border-radius: 0 0 5px 5px;
-  border-left: 2px grey solid;
-  border-bottom: 2px grey solid;
-  max-height: 800px;
-  overflow-y: scroll;
+  max-height: 600px;
+  transition: 1s;
+  flex-direction: column;
+}
+.toCartPage {
+  color: white;
+  background-color: rgb(95, 95, 95);
+  border: none;
+  padding: 5px;
+  border-radius: 5px;
+  transition: 0.2s ease-in-out;
+  cursor: pointer;
+  margin-right: 40px;
+}
+.toCartPage:hover {
+  background-color: white;
+  color: rgb(53, 53, 53);
+}
+.toCartPage:active {
+  transition: none;
+  color: rgb(0, 104, 144);
+  font-weight: bold;
 }
 .cartItem {
   height: 120px;
   display: flex;
   padding: 10px;
-  border-bottom: 2px grey solid;
+  padding-right: 40px;
+}
+.cartItem:not(:last-child) {
+  border-bottom: 2px rgb(0, 104, 144) solid;
 }
 .cartItem .cartitemPrice {
   margin: auto 0;
@@ -253,7 +288,7 @@ span.quantityContainer button:active {
   width: 40px;
 }
 .cartItem .removeBtn:hover {
-  color: #0050b9;
+  color: rgb(0, 104, 144);
 }
 .cartItemImg {
   height: 120px;
@@ -269,6 +304,9 @@ span.quantityContainer button:active {
   justify-content: center;
   align-items: center;
 }
+.cartIcon {
+  cursor: pointer;
+}
 .cartIcon i {
   text-align: center;
   color: white;
@@ -281,6 +319,10 @@ span.quantityContainer button:active {
   align-items: center;
   height: 40px;
 }
+.cartContainer {
+  overflow-y: scroll;
+}
+
 #app-cart {
   max-width: 1000px;
   margin: 0 auto;
@@ -326,8 +368,11 @@ span.quantityContainer button:active {
   display: flex;
   width: 80px;
 }
-.Container .totalPrice {
-  margin-top: 20px;
+.totalPrice {
+  border-top: 2px solid rgb(0, 104, 144);
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
 }
 .checkoutItem {
   display: flex;
@@ -354,7 +399,7 @@ input[type="number"] {
   -moz-appearance: textfield;
 }
 .is-active {
-  display: flex;
+  right: 0;
 }
 @media only screen and (max-width: 1000px) {
   #app-items {

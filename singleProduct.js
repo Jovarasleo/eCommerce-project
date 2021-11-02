@@ -165,16 +165,13 @@ function render() {
 function cartRender() {
   let cartPageAtag = createEl("a", "toCartPagetag");
   let toCartPage = createEl("button", "toCartPage");
-  toCartPage.textContent = "buy";
+  toCartPage.textContent = "To order";
   cartPageAtag.href = "/cart.html";
   cartPageAtag.append(toCartPage);
   let totalPriceContainer = createEl("div", "totalPrice");
   let totalPrice = 0;
-  let container =
-    cartTag.querySelector(".cartContainer") || createEl("div", "cartContainer");
-  if (container !== null && container !== "") {
-    container.innerHTML = null;
-  }
+  cartTag.innerHTML = "";
+  let container = createEl("div", "cartContainer");
 
   let cart = items.filter((item) =>
     cartArray.some((selectedItem) => selectedItem.id === item.id)
@@ -245,13 +242,13 @@ function cartRender() {
     quantityContainer.append(incBtnminus, select, incBtnplus);
     aTag.append(cartInfoName);
     cartItem.append(cartImg, aTag, cartInfoPrice, removeBtn, quantityContainer);
-    container.append(cartItem, totalPriceContainer);
-    cartTag.append(container);
+    container.append(cartItem);
+    cartTag.append(container, totalPriceContainer);
     localStorage.setItem("cart", JSON.stringify(cartArray));
     cartIcon.textContent = cartArray.length;
   });
   totalPriceContainer.append(
-    `Total sum: ${Math.round(totalPrice * 100) / 100}`,
+    `Total: ${Math.round(totalPrice * 100) / 100} €`,
     cartPageAtag
   );
 }

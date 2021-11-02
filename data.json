@@ -20,19 +20,26 @@
     "thumbnail": "https://m.media-amazon.com/images/I/51xfJ2RkmKL.jpg",
     "pictures": [
       "https://dlcdnwebimgs.asus.com/gain/25BA78E2-16EF-458B-BAD4-786AECFCBC38/w1000/h732",
-      "https://dlcdnwebimgs.asus.com/gain/242994B5-D4CD-40EF-B6C9-0C094CDD7690/w1000/h732"
+      "https://dlcdnwebimgs.asus.com/gain/242994B5-D4CD-40EF-B6C9-0C094CDD7690/w1000/h732",
+      "https://dlcdnwebimgs.asus.com/gain/1B811C49-FEC4-4957-BC98-B30A569F364A/w1000/h732",
+      "https://dlcdnwebimgs.asus.com/gain/684B99AC-0E50-48E0-98A7-CEF44D2CFFAC/w1000/h732",
+      "https://dlcdnwebimgs.asus.com/gain/1F6C5039-6693-4395-B8F6-7A83EB9EF923/w1000/h732"
     ],
     "quantity": 99,
-    "description": ""
+    "description": "BIOS update might require for AMD Zen 3 Ryzen 5000 series CPU. AMD AM4 Socket and PCIe 4.0: The perfect pairing for 3rd Gen AMD Ryzen CPUs. Robust Power Design: 12+2 DrMOS power stages with high-quality alloy chokes and durable capacitors to provide reliable power for the latest high-core-count AMD CPUs. Optimized Thermal Solution: Fanless VRM and chipset heatsinks with ASUS Stack Cool 3+ design keep your system running reliably under heavy load by enhancing passive cooling capacity for critical onboard components. High-performance Gaming Networking: On-board WiFi 6 (802.11ax), Bluetooth V5.1 and 2.5 Gb LAN with ASUS LANGuard. Best Gaming Connectivity: Supports HDMI 2.1 (4K@60HZ) and DisplayPort 1.2 output, plus dual M.2 slots (NVMe SSD) - one with PCIe 4.0 x4 connectivity, USB 3.2 Gen 2 Type-C port and Thunderbolt header"
   },
   {
     "name": "MSI MAG B550 TOMAHAWK",
     "id": "3",
     "price": 197.89,
     "thumbnail": "https://cdna.pcpartpicker.com/static/forever/images/product/52ee465cbd64b16145232d863524c066.256p.jpg",
-    "pictures": [],
+    "pictures": [
+      "https://asset.msi.com/resize/image/global/product/product_7_20200520165812_5ec4f124dcab7.png62405b38c58fe0f07fcef2367d8a9ba1/1024.png",
+      "https://asset.msi.com/resize/image/global/product/product_5_20200520165805_5ec4f11d89e51.png62405b38c58fe0f07fcef2367d8a9ba1/1024.png",
+      "https://asset.msi.com/resize/image/global/product/product_2_20200520165819_5ec4f12b5dc4b.png62405b38c58fe0f07fcef2367d8a9ba1/1024.png"
+    ],
     "quantity": 4,
-    "description": ""
+    "description": "Supports AMD Ryzen™ 5000 & 3000 Series desktop processors (not compatible with AMD Ryzen™ 5 3400G & Ryzen™ 3 3200G) and AMD Ryzen™ 4000 G-Series desktop processors. Supports DDR4 Memory, up to 5100+(OC) MHz. Lightning Fast Game experience: PCIe 4.0, Lightning Gen 4 x4 M.2 with M.2 Shield Frozr, AMD Turbo USB 3.2 Gen 2. Premium Thermal Solution: Extended Heatsink Design with additional choke thermal pad rated for 7W/mk and PCB with 2oz thickened copper are built for high performance system and non-stop gaming experience. Enhanced Power Design: 10+2+1 Duet Rail Power System, Digital PWM, Core Boost, DDR4 Boost. Latest Network Solution: Onboard 2.5G LAN plus Gigabit LAN with LAN Manager deliver the best online experience without lag. Mystic Light: 16.8 million colors / 29 effects controlled in one click. Mystic Light Extension supports RGB and RAINBOW LED strip. Pre-installed I/O Shielding: Better EMI protection and more convenience for installation. Audio Boost: Reward your ears with studio grade sound quality for the most immersive gaming experience. Multi-GPU: With Steel Armor PCI-E slots. Supports 2-Way AMD Crossfire™"
   },
   {
     "name": "MSI B550-A PRO",
