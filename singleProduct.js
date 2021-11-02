@@ -21,6 +21,9 @@ window.addEventListener("load", async () => {
     cartRender();
   }
 });
+function cartSize() {
+  cartIcon.textContent = cartArray.length;
+}
 function createEl(type, elClass) {
   const element = document.createElement(type);
   element.classList = elClass;
@@ -71,20 +74,12 @@ function render() {
   const pictureArrLength = item.pictures.length;
   const picturesArray = item.pictures;
   let newindex = 0;
-  cartIcon.textContent = 0;
+  cartSize();
 
   descriptionP.textContent = item.description;
   descriptionBtn.textContent = "Overview";
-
   incBtnplus.textContent = "+";
   incBtnminus.textContent = "-";
-
-  incBtnplus.addEventListener("click", () => {
-    incrementValue(select, item.quantity);
-  });
-  incBtnminus.addEventListener("click", () => {
-    decrementValue(select);
-  });
 
   select.type = "number";
   select.min = 1;
@@ -95,6 +90,12 @@ function render() {
   cardInfoPrice.textContent = `${item.price} €`;
   toCart.textContent = "Add to cart";
 
+  incBtnplus.addEventListener("click", () => {
+    incrementValue(select, item.quantity);
+  });
+  incBtnminus.addEventListener("click", () => {
+    decrementValue(select);
+  });
   toCart.addEventListener("click", () => {
     if (select.value > 0 && select.value <= item.quantity) {
       if (cartArray.some((o) => o.id == item.id)) {
@@ -106,8 +107,27 @@ function render() {
         });
       }
     }
-    cartIcon.textContent = cartArray.length;
     toLocal();
+  });
+  descriptionBtn.addEventListener("click", () => {
+    descriptionP.classList.toggle("descriptionShow");
+    descriptionBtn.classList.toggle("active--button");
+  });
+  arrowRight.addEventListener("click", () => {
+    nextImage();
+  });
+  arrowLeft.addEventListener("click", () => {
+    previousImage();
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "ArrowRight") {
+      nextImage();
+    }
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "ArrowLeft") {
+      previousImage();
+    }
   });
 
   if (item.pictures.length) {
@@ -136,26 +156,7 @@ function render() {
       newindex = pictureArrLength - 1;
     }
   }
-  arrowRight.addEventListener("click", () => {
-    nextImage();
-  });
-  arrowLeft.addEventListener("click", () => {
-    previousImage();
-  });
-  document.addEventListener("keydown", (event) => {
-    if (event.key === "ArrowRight") {
-      nextImage();
-    }
-  });
-  document.addEventListener("keydown", (event) => {
-    if (event.key === "ArrowLeft") {
-      previousImage();
-    }
-  });
-  descriptionBtn.addEventListener("click", () => {
-    descriptionP.classList.toggle("descriptionShow");
-    descriptionBtn.classList.toggle("active--button");
-  });
+
   quantityContainer.append(incBtnminus, select, incBtnplus);
   toCartContainer.append(quantityContainer, toCart);
   descriptionContainer.appendChild(descriptionP);
@@ -201,18 +202,12 @@ function cartRender() {
     let aTag = createEl("a", "link");
 
     aTag.href = `/singleProduct.html?product=${item.id}`;
-
     incBtnplus.textContent = "+";
     incBtnminus.textContent = "-";
-
-    if (item.thumbnail) {
-      cartImg.src = item.thumbnail;
-    } else if (item.pictures.length) {
-      cartImg.src = item.pictures[0];
-    } else cartImg.src = "/assets/icons/no-image.png";
-
     cartInfoName.textContent = item.name;
     cartInfoPrice.textContent = `${item.price} €`;
+    removeBtn.innerHTML = "<i class='fal fa-times'></i>";
+    cartSize();
 
     incBtnplus.addEventListener("click", () => {
       incrementValue(select, item.quantity);
@@ -224,6 +219,15 @@ function cartRender() {
       cartArray[realIndex].quantity = Number(select.value);
       toLocal();
     });
+    select.addEventListener("change", (event) => {
+      cartArray[realIndex].quantity = event.target.value;
+      toLocal();
+    });
+    removeBtn.addEventListener("click", () => {
+      cartArray.splice(realIndex, 1);
+      cartSize();
+      toLocal();
+    });
 
     function quantityCheck() {
       if (cartArray[realIndex].quantity > item.quantity) {
@@ -233,31 +237,25 @@ function cartRender() {
       } else return (select.value = cartArray[realIndex].quantity);
     }
 
+    if (item.thumbnail) {
+      cartImg.src = item.thumbnail;
+    } else if (item.pictures.length) {
+      cartImg.src = item.pictures[0];
+    } else cartImg.src = "/assets/icons/no-image.png";
+
     select.type = "number";
     select.min = 1;
     select.max = item.quantity;
     select.value = quantityCheck();
-
-    select.addEventListener("change", (event) => {
-      cartArray[realIndex].quantity = event.target.value;
-      toLocal();
-    });
-
-    removeBtn.innerHTML = "<i class='fal fa-times'></i>";
-    removeBtn.addEventListener("click", () => {
-      cartArray.splice(realIndex, 1);
-      cartIcon.textContent = cartArray.length;
-      toLocal();
-    });
     itemPrice = item.price * select.value;
     totalPrice += itemPrice;
+
     quantityContainer.append(incBtnminus, select, incBtnplus);
     aTag.append(cartInfoName);
     cartItem.append(cartImg, aTag, cartInfoPrice, removeBtn, quantityContainer);
     container.append(cartItem);
     cartTag.append(container, totalPriceContainer);
     localStorage.setItem("cart", JSON.stringify(cartArray));
-    cartIcon.textContent = cartArray.length;
   });
   totalPriceContainer.append(
     `Total: ${Math.round(totalPrice * 100) / 100} €`,

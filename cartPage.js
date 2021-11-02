@@ -21,7 +21,9 @@ window.addEventListener("load", async () => {
     cartRender();
   }
 });
-
+function cartSize() {
+  cartIcon.textContent = cartArray.length;
+}
 function createEl(type, elClass) {
   const element = document.createElement(type);
   element.classList = elClass;
@@ -51,13 +53,14 @@ function decrementValue(select) {
 function cartRender() {
   let cartPageAtag = createEl("a", "toCartPagetag");
   let toCartPage = createEl("button", "toCartPage");
+  let totalPriceContainer = createEl("div", "totalPrice");
+  let container = createEl("div", "cartContainer");
+  let totalPrice = 0;
   toCartPage.textContent = "To Check Out";
   cartPageAtag.href = "/checkout.html";
-  cartPageAtag.append(toCartPage);
-  let totalPriceContainer = createEl("div", "totalPrice");
-  let totalPrice = 0;
   displayItem.innerHTML = "";
-  let container = createEl("div", "cartContainer");
+
+  cartPageAtag.append(toCartPage);
 
   let cart = items.filter((item) =>
     cartArray.some((selectedItem) => selectedItem.id === item.id)
@@ -78,10 +81,13 @@ function cartRender() {
     let quantityContainer = createEl("span", "quantityContainer");
     let aTag = createEl("a", "link");
     let itemPrice = 0;
-    aTag.href = `/singleProduct.html?product=${item.id}`;
 
+    aTag.href = `/singleProduct.html?product=${item.id}`;
+    removeBtn.innerHTML = "<i class='fal fa-times'></i>";
     incBtnplus.textContent = "+";
     incBtnminus.textContent = "-";
+    cartInfoName.textContent = item.name;
+    cartInfoPrice.textContent = `${item.price} €`;
 
     incBtnplus.addEventListener("click", () => {
       incrementValue(select, item.quantity);
@@ -98,14 +104,15 @@ function cartRender() {
       cartArray[realIndex].quantity = event.target.value;
       toLocal();
     });
-
-    cartInfoName.textContent = item.name;
-    cartInfoPrice.textContent = `${item.price} €`;
-
-    select.type = "number";
-    select.min = 1;
-    select.max = item.quantity;
-    select.value = quantityCheck();
+    removeBtn.addEventListener("click", () => {
+      cartArray.splice(realIndex, 1);
+      cartSize();
+      toLocal();
+    });
+    toCartPage.addEventListener("click", () => {
+      checkoutArr.push({ id: item.id, quantity: Number(select.value) });
+      localStorage.setItem("checkout", JSON.stringify(checkoutArr));
+    });
     function quantityCheck() {
       if (cartArray[realIndex].quantity > item.quantity) {
         return (select.value = item.quantity);
@@ -114,13 +121,10 @@ function cartRender() {
       } else return (select.value = cartArray[realIndex].quantity);
     }
 
-    removeBtn.innerHTML = "<i class='fal fa-times'></i>";
-
-    removeBtn.addEventListener("click", () => {
-      cartArray.splice(realIndex, 1);
-      cartIcon.textContent = cartArray.length;
-      toLocal();
-    });
+    select.type = "number";
+    select.min = 1;
+    select.max = item.quantity;
+    select.value = quantityCheck();
     itemPrice = item.price * select.value;
     totalPrice += itemPrice;
 
@@ -131,17 +135,14 @@ function cartRender() {
     } else {
       cartImg.src = "/assets/icons/no-image.png";
     }
-    toCartPage.addEventListener("click", () => {
-      checkoutArr.push({ id: item.id, quantity: Number(select.value) });
-      localStorage.setItem("checkout", JSON.stringify(checkoutArr));
-    });
+
     quantityContainer.append(incBtnminus, select, incBtnplus);
     aTag.append(cartInfoName);
     cartItem.append(cartImg, aTag, cartInfoPrice, removeBtn, quantityContainer);
     container.append(cartItem);
     displayItem.append(container, totalPriceContainer);
     localStorage.setItem("cart", JSON.stringify(cartArray));
-    cartIcon.textContent = cartArray.length;
+    cartSize();
   });
   totalPriceContainer.append(
     `Total: ${Math.round(totalPrice * 100) / 100} €`,

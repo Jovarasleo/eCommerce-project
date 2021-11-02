@@ -24,7 +24,9 @@ window.addEventListener("load", async () => {
     window.location.href = "/index.html";
   }
 });
-
+function cartSize() {
+  cartIcon.textContent = cartArray.length;
+}
 function createEl(type, elClass) {
   const element = document.createElement(type);
   element.classList = elClass;
@@ -40,25 +42,25 @@ function checkoutRender() {
   let checkOutInfoName = createEl("div", "checkoutInfo__Name");
   let checkOutInfoPrice = createEl("div", "checkoutInfo__Price");
   let checkOutInfoQuantity = createEl("div", "checkoutInfo__Quantity");
+  let totalPriceContainer = createEl("div", "totalPrice");
+  let container =
+    displayItem.querySelector(".checkoutContainer") ||
+    createEl("div", "checkoutContainer");
+  let totalPrice = 0;
   checkOutInfoName.textContent = "Product Name";
   checkOutInfoPrice.textContent = "Price";
   checkOutInfoQuantity.textContent = "Quantity";
+
   checkOutInfoContainer.append(
     checkOutInfoQuantity,
     checkOutInfoName,
     checkOutInfoPrice
   );
-  let totalPriceContainer = createEl("div", "totalPrice");
-  let totalPrice = 0;
-  let container =
-    displayItem.querySelector(".checkoutContainer") ||
-    createEl("div", "checkoutContainer");
-
   let cart = items.filter((item) =>
     checkoutArr.some((selectedItem) => selectedItem.id === item.id)
   );
   if (!checkoutArr.length) {
-    displayItem.innerHTML = "Thank you for the purchase <br />";
+    displayItem.innerHTML = "Thank you for your order <br />";
     displayItem.innerHTML += "Redirecting..";
     setTimeout(() => {
       window.location.href = "/index.html";
@@ -141,8 +143,8 @@ function checkoutRender() {
     if (validateEmail() && validateName() && validateLName()) {
       checkoutArr = [];
       cartArray = [];
-      cartIcon.textContent = cartArray.length;
       localStorage.setItem("checkout", JSON.stringify(checkoutArr));
+      cartSize();
       toLocal();
       checkoutRender();
     }
@@ -155,21 +157,21 @@ function checkoutRender() {
     let select = createEl("span", "Quantity");
     let aTag = createEl("a", "link");
     let itemPrice = 0;
+
     aTag.href = `/singleProduct.html?product=${item.id}`;
     cartInfoName.textContent = item.name;
     cartInfoPrice.textContent = `${item.price} €`;
-
     select.textContent = checkoutArr[realIndex].quantity;
-
     itemPrice = item.price * checkoutArr[realIndex].quantity;
     totalPrice += itemPrice;
+    cartSize();
+
     aTag.append(cartInfoName);
     cartItem.append(select, aTag, cartInfoPrice);
     container.append(cartItem);
     mainContainer.append(checkOutInfoContainer, container, totalPriceContainer);
     displayItem.append(mainContainer, form);
     toLocal();
-    cartIcon.textContent = cartArray.length;
   });
   totalPriceContainer.append(`Total: ${Math.round(totalPrice * 100) / 100} €`);
 }
