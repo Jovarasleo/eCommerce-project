@@ -10,11 +10,6 @@ let checkoutArr = [];
 let cartArray = [];
 let id = location.href.split("=")[1];
 
-function createEl(type, elClass) {
-  const element = document.createElement(type);
-  element.classList = elClass;
-  return element;
-}
 window.addEventListener("load", async () => {
   const result = await fetch("/data.json");
   const data = await result.json();
@@ -26,6 +21,33 @@ window.addEventListener("load", async () => {
     cartRender();
   }
 });
+
+function createEl(type, elClass) {
+  const element = document.createElement(type);
+  element.classList = elClass;
+  return element;
+}
+function toLocal() {
+  localStorage.setItem("cart", JSON.stringify(cartArray));
+  cartRender();
+}
+function incrementValue(select, quantity) {
+  var value = Number(select.value, quantity);
+  value = isNaN(value) ? 0 : value;
+  if (value < quantity) {
+    value++;
+    select.value = value;
+  }
+}
+function decrementValue(select) {
+  var value = Number(select.value);
+  value = isNaN(value) ? 0 : value;
+  if (value > 1) {
+    value--;
+    select.value = value;
+  }
+}
+
 function cartRender() {
   let cartPageAtag = createEl("a", "toCartPagetag");
   let toCartPage = createEl("button", "toCartPage");
@@ -66,37 +88,22 @@ function cartRender() {
     incBtnplus.textContent = "+";
     incBtnminus.textContent = "-";
 
-    toCartPage.addEventListener("click", () => {
-      checkoutArr.push({ id: item.id, quantity: Number(select.value) });
-      localStorage.setItem("checkout", JSON.stringify(checkoutArr));
-      console.log(checkoutArr);
-    });
-
     incBtnplus.addEventListener("click", () => {
       incrementValue(select, item.quantity);
       cartArray[realIndex].quantity = Number(select.value);
-      localStorage.setItem("cart", JSON.stringify(cartArray));
-      cartRender();
+      toLocal();
     });
     incBtnminus.addEventListener("click", () => {
       decrementValue(select);
       cartArray[realIndex].quantity = Number(select.value);
-      localStorage.setItem("cart", JSON.stringify(cartArray));
-      cartRender();
+      toLocal();
     });
 
     select.addEventListener("change", (event) => {
       cartArray[realIndex].quantity = event.target.value;
-      localStorage.setItem("cart", JSON.stringify(cartArray));
-      cartRender();
+      toLocal();
     });
-    if (item.thumbnail) {
-      cartImg.src = item.thumbnail;
-    } else if (item.pictures.length) {
-      cartImg.src = item.pictures[0];
-    } else {
-      cartImg.src = "/assets/icons/no-image.png";
-    }
+
     cartInfoName.textContent = item.name;
     cartInfoPrice.textContent = item.price;
 
@@ -116,12 +123,23 @@ function cartRender() {
 
     removeBtn.addEventListener("click", () => {
       cartArray.splice(realIndex, 1);
-      localStorage.setItem("cart", JSON.stringify(cartArray));
       cartIcon.textContent = cartArray.length;
-      cartRender();
+      toLocal();
     });
     itemPrice = item.price * select.value;
     totalPrice += itemPrice;
+
+    if (item.thumbnail) {
+      cartImg.src = item.thumbnail;
+    } else if (item.pictures.length) {
+      cartImg.src = item.pictures[0];
+    } else {
+      cartImg.src = "/assets/icons/no-image.png";
+    }
+    toCartPage.addEventListener("click", () => {
+      checkoutArr.push({ id: item.id, quantity: Number(select.value) });
+      localStorage.setItem("checkout", JSON.stringify(checkoutArr));
+    });
     quantityContainer.append(incBtnminus, select, incBtnplus);
     aTag.append(cartInfoName);
     cartItem.append(cartImg, aTag, cartInfoPrice, removeBtn, quantityContainer);
@@ -134,22 +152,4 @@ function cartRender() {
     `Total sum: ${Math.round(totalPrice * 100) / 100}`,
     cartPageAtag
   );
-}
-
-//increase decrease functions to select quantity
-function incrementValue(select, quantity) {
-  var value = Number(select.value, quantity);
-  value = isNaN(value) ? 0 : value;
-  if (value < quantity) {
-    value++;
-    select.value = value;
-  }
-}
-function decrementValue(select) {
-  var value = Number(select.value);
-  value = isNaN(value) ? 0 : value;
-  if (value > 1) {
-    value--;
-    select.value = value;
-  }
 }

@@ -1,121 +1,60 @@
-let items;
-let id = location.href.split("=")[1];
 const appItems = document.querySelector("#app-items");
 const cartIcon = document.querySelector(".cartIcon i");
 const body = document.querySelector("body");
 const cartTag = document.querySelector(".cart");
 const searchInput = document.querySelector(".searchInput");
 const searchBtn = document.querySelector(".searchBtn");
+
 let cartArray = [];
+let items;
+let id = location.href.split("=")[1];
+
+window.addEventListener("load", async () => {
+  const result = await fetch("/data.json");
+  const data = await result.json();
+
+  items = data;
+  render(items);
+
+  if (localStorage.getItem("cart")) {
+    cartArray = JSON.parse(localStorage.getItem("cart"));
+    cartRender();
+  }
+  if (id) {
+    searchInput.value = id;
+    render(items);
+  }
+});
 
 function renderAndUpdate() {
   render();
   history.replaceState({}, null, `/index.html?search=${searchInput.value}`);
+}
+function toLocal() {
+  localStorage.setItem("cart", JSON.stringify(cartArray));
+  cartRender();
 }
 function createEl(type, elClass) {
   const element = document.createElement(type);
   element.classList = elClass;
   return element;
 }
-//function to render cart items
-function cartRender() {
-  let cartPageAtag = createEl("a", "toCartPagetag");
-  let toCartPage = createEl("button", "toCartPage");
-  toCartPage.textContent = "buy";
-  cartPageAtag.href = "/cart.html";
-  cartPageAtag.append(toCartPage);
-  let totalPriceContainer = createEl("div", "totalPrice");
-  let totalPrice = 0;
-  let container =
-    cartTag.querySelector(".cartContainer") || createEl("div", "cartContainer");
-  if (container !== null && container !== "") {
-    container.innerHTML = null;
+function incrementValue(select, quantity) {
+  var value = Number(select.value, quantity);
+  value = isNaN(value) ? 0 : value;
+  if (value < quantity) {
+    value++;
+    select.value = value;
   }
-
-  let cart = items.filter((item) =>
-    cartArray.some((selectedItem) => selectedItem.id === item.id)
-  );
-  cart.forEach((item) => {
-    const realIndex = cartArray.findIndex((obj) => obj.id === item.id);
-    let cartItem = createEl("div", "cartItem");
-    let cartImg = createEl("img", "cartItemImg");
-    let cartInfoName = createEl("p", "cartitemName");
-    let cartInfoPrice = createEl("span", "cartitemPrice");
-    let removeBtn = createEl("div", "removeBtn");
-    let select = createEl("input", "selectQuantity");
-    let incBtnplus = createEl("button", "selectinc");
-    let incBtnminus = createEl("button", "selectdec");
-    let quantityContainer = createEl("span", "quantityContainer");
-    let aTag = createEl("a", "link");
-    let itemPrice = 0;
-    aTag.href = `/singleProduct.html?product=${item.id}`;
-
-    incBtnplus.textContent = "+";
-    incBtnminus.textContent = "-";
-
-    incBtnplus.addEventListener("click", () => {
-      incrementValue(select, item.quantity);
-      cartArray[realIndex].quantity = Number(select.value);
-      localStorage.setItem("cart", JSON.stringify(cartArray));
-      cartRender();
-    });
-    incBtnminus.addEventListener("click", () => {
-      decrementValue(select);
-      cartArray[realIndex].quantity = Number(select.value);
-      localStorage.setItem("cart", JSON.stringify(cartArray));
-      cartRender();
-    });
-
-    if (item.thumbnail) {
-      cartImg.src = item.thumbnail;
-    } else if (item.pictures.length) {
-      cartImg.src = item.pictures[0];
-    } else {
-      cartImg.src = "/assets/icons/no-image.png";
-    }
-    cartInfoName.textContent = item.name;
-    cartInfoPrice.textContent = item.price;
-
-    select.type = "number";
-    select.min = 1;
-    select.max = item.quantity;
-    select.value = quantityCheck();
-    function quantityCheck() {
-      if (cartArray[realIndex].quantity > item.quantity) {
-        return (select.value = item.quantity);
-      } else if (cartArray[realIndex].quantity < 1) {
-        return (select.value = 1);
-      } else return (select.value = cartArray[realIndex].quantity);
-    }
-    select.addEventListener("change", (event) => {
-      cartArray[realIndex].quantity = event.target.value;
-      localStorage.setItem("cart", JSON.stringify(cartArray));
-      cartRender();
-    });
-    removeBtn.innerHTML = "<i class='fal fa-times'></i>";
-
-    removeBtn.addEventListener("click", () => {
-      cartArray.splice(realIndex, 1);
-      localStorage.setItem("cart", JSON.stringify(cartArray));
-      cartIcon.textContent = cartArray.length;
-      cartRender();
-    });
-    itemPrice = item.price * select.value;
-    totalPrice += itemPrice;
-    quantityContainer.append(incBtnminus, select, incBtnplus);
-    aTag.append(cartInfoName);
-    cartItem.append(cartImg, aTag, cartInfoPrice, removeBtn, quantityContainer);
-    container.append(cartItem, totalPriceContainer);
-    cartTag.append(container);
-    localStorage.setItem("cart", JSON.stringify(cartArray));
-    cartIcon.textContent = cartArray.length;
-  });
-  totalPriceContainer.append(
-    `Total sum: ${Math.round(totalPrice * 100) / 100}`,
-    cartPageAtag
-  );
 }
-
+function decrementValue(select) {
+  var value = Number(select.value);
+  value = isNaN(value) ? 0 : value;
+  if (value > 1) {
+    value--;
+    select.value = value;
+  }
+}
 //function to render all items in the main page
 function render() {
   appItems.innerHTML = null;
@@ -173,9 +112,7 @@ function render() {
             cartArray.push({ id: item.id, quantity: Number(select.value) });
           }
         }
-
-        cartRender(cartArray, items);
-        localStorage.setItem("cart", JSON.stringify(cartArray));
+        toLocal();
       });
       quantityContainer.append(incBtnminus, select, incBtnplus);
       aTag.append(cardInfoName);
@@ -191,23 +128,100 @@ function render() {
       }
     });
 }
+//function to render cart items
+function cartRender() {
+  let cartPageAtag = createEl("a", "toCartPagetag");
+  let toCartPage = createEl("button", "toCartPage");
+  toCartPage.textContent = "buy";
+  cartPageAtag.href = "/cart.html";
+  cartPageAtag.append(toCartPage);
+  let totalPriceContainer = createEl("div", "totalPrice");
+  let totalPrice = 0;
+  let container =
+    cartTag.querySelector(".cartContainer") || createEl("div", "cartContainer");
+  if (container !== null && container !== "") {
+    container.innerHTML = null;
+  }
 
-//increase decrease functions to select quantity
-function incrementValue(select, quantity) {
-  var value = Number(select.value, quantity);
-  value = isNaN(value) ? 0 : value;
-  if (value < quantity) {
-    value++;
-    select.value = value;
-  }
-}
-function decrementValue(select) {
-  var value = Number(select.value);
-  value = isNaN(value) ? 0 : value;
-  if (value > 1) {
-    value--;
-    select.value = value;
-  }
+  let cart = items.filter((item) =>
+    cartArray.some((selectedItem) => selectedItem.id === item.id)
+  );
+  cart.forEach((item) => {
+    const realIndex = cartArray.findIndex((obj) => obj.id === item.id);
+    let cartItem = createEl("div", "cartItem");
+    let cartImg = createEl("img", "cartItemImg");
+    let cartInfoName = createEl("p", "cartitemName");
+    let cartInfoPrice = createEl("span", "cartitemPrice");
+    let removeBtn = createEl("div", "removeBtn");
+    let select = createEl("input", "selectQuantity");
+    let incBtnplus = createEl("button", "selectinc");
+    let incBtnminus = createEl("button", "selectdec");
+    let quantityContainer = createEl("span", "quantityContainer");
+    let aTag = createEl("a", "link");
+    let itemPrice = 0;
+    aTag.href = `/singleProduct.html?product=${item.id}`;
+
+    incBtnplus.textContent = "+";
+    incBtnminus.textContent = "-";
+
+    incBtnplus.addEventListener("click", () => {
+      incrementValue(select, item.quantity);
+      cartArray[realIndex].quantity = Number(select.value);
+      toLocal();
+    });
+    incBtnminus.addEventListener("click", () => {
+      decrementValue(select);
+      cartArray[realIndex].quantity = Number(select.value);
+      toLocal();
+    });
+
+    if (item.thumbnail) {
+      cartImg.src = item.thumbnail;
+    } else if (item.pictures.length) {
+      cartImg.src = item.pictures[0];
+    } else {
+      cartImg.src = "/assets/icons/no-image.png";
+    }
+    cartInfoName.textContent = item.name;
+    cartInfoPrice.textContent = item.price;
+
+    select.type = "number";
+    select.min = 1;
+    select.max = item.quantity;
+    select.value = quantityCheck();
+    function quantityCheck() {
+      if (cartArray[realIndex].quantity > item.quantity) {
+        return (select.value = item.quantity);
+      } else if (cartArray[realIndex].quantity < 1) {
+        return (select.value = 1);
+      } else return (select.value = cartArray[realIndex].quantity);
+    }
+    select.addEventListener("change", (event) => {
+      cartArray[realIndex].quantity = event.target.value;
+      toLocal();
+    });
+    removeBtn.innerHTML = "<i class='fal fa-times'></i>";
+
+    removeBtn.addEventListener("click", () => {
+      cartArray.splice(realIndex, 1);
+      localStorage.setItem("cart", JSON.stringify(cartArray));
+      cartIcon.textContent = cartArray.length;
+      cartRender();
+    });
+    itemPrice = item.price * select.value;
+    totalPrice += itemPrice;
+    quantityContainer.append(incBtnminus, select, incBtnplus);
+    aTag.append(cartInfoName);
+    cartItem.append(cartImg, aTag, cartInfoPrice, removeBtn, quantityContainer);
+    container.append(cartItem, totalPriceContainer);
+    cartTag.append(container);
+    localStorage.setItem("cart", JSON.stringify(cartArray));
+    cartIcon.textContent = cartArray.length;
+  });
+  totalPriceContainer.append(
+    `Total sum: ${Math.round(totalPrice * 100) / 100}`,
+    cartPageAtag
+  );
 }
 //eventlisteners to filter search results
 document.querySelector("nav").addEventListener("keydown", (event) => {
@@ -221,21 +235,5 @@ searchBtn.addEventListener("click", () => {
 searchInput.addEventListener("input", () => {
   if (!searchInput.value) {
     renderAndUpdate();
-  }
-});
-window.addEventListener("load", async () => {
-  const result = await fetch("/data.json");
-  const data = await result.json();
-
-  items = data;
-  render(items);
-
-  if (localStorage.getItem("cart")) {
-    cartArray = JSON.parse(localStorage.getItem("cart"));
-    cartRender();
-  }
-  if (id) {
-    searchInput.value = id;
-    render(items);
   }
 });

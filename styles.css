@@ -335,7 +335,7 @@ span.quantityContainer button:active {
   align-items: center;
   overflow-wrap: normal;
 }
-.checkoutItem:nth-last-child() {
+.checkoutItem:not(:last-child) {
   border-bottom: 1px darkgrey solid;
 }
 .checkoutitemName {

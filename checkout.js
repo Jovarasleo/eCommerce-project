@@ -5,28 +5,36 @@ const cartTag = document.querySelector(".cart");
 const searchInput = document.querySelector(".searchInput");
 const searchBtn = document.querySelector(".searchBtn");
 const form = document.querySelector(".userInfoForm");
+const mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
 let checkoutArr = [];
 let cartArray = JSON.parse(localStorage.getItem("cart"));
 let id = location.href.split("=")[1];
 
-function createEl(type, elClass) {
-  const element = document.createElement(type);
-  element.classList = elClass;
-  return element;
-}
 window.addEventListener("load", async () => {
   const result = await fetch("/data.json");
   const data = await result.json();
 
   items = data;
 
-  if (localStorage.getItem("checkout")) {
+  if (JSON.parse(localStorage.getItem("checkout")).length) {
     checkoutArr = JSON.parse(localStorage.getItem("checkout"));
-    cartRender();
+    checkoutRender();
+  } else {
+    window.location.href = "/index.html";
   }
 });
-function cartRender() {
+
+function createEl(type, elClass) {
+  const element = document.createElement(type);
+  element.classList = elClass;
+  return element;
+}
+function toLocal() {
+  localStorage.setItem("cart", JSON.stringify(cartArray));
+}
+
+function checkoutRender() {
   let mainContainer = createEl("div", "Container");
   let checkOutInfoContainer = createEl("div", "checkoutInfo__Container");
   let checkOutInfoName = createEl("div", "checkoutInfo__Name");
@@ -40,22 +48,16 @@ function cartRender() {
     checkOutInfoName,
     checkOutInfoPrice
   );
-  let toCartPage = createEl("button", "toCartPage");
-  toCartPage.textContent = "Order";
   let totalPriceContainer = createEl("div", "totalPrice");
   let totalPrice = 0;
   let container =
     displayItem.querySelector(".checkoutContainer") ||
     createEl("div", "checkoutContainer");
-  if (container !== null && container !== "") {
-    container.innerHTML = null;
-    container.remove();
-  }
 
   let cart = items.filter((item) =>
     checkoutArr.some((selectedItem) => selectedItem.id === item.id)
   );
-  if (!cart.length) {
+  if (!checkoutArr.length) {
     displayItem.innerHTML = "Thank you for the purchase <br />";
     displayItem.innerHTML += "Redirecting..";
     setTimeout(() => {
@@ -77,6 +79,17 @@ function cartRender() {
   let labelDelivery = createEl("label", "labelPayment");
   let inputDelivery = createEl("select", "labelPayment");
   let deliveryOption = createEl("option", "paymentOption");
+  let labelEmail = createEl("label", "labelEmail");
+  let inputEmail = createEl("input", "inputEmail");
+  let Submit = createEl("button", "submit");
+  form.method = "get";
+  Submit.type = "submit";
+  Submit.textContent = "Order";
+  labelEmail.textContent = "Email:";
+  inputEmail.type = "email";
+  inputPhone.type = "tel";
+  inputPhone.pattern = "[+][3][7][0][0-9]{8}";
+  inputPhone.placeholder = "+370-123-12345";
   labelDelivery.textContent = "Select delivery:";
   inputDelivery.value = "In Shop";
   deliveryOption.textContent = "In Shop";
@@ -94,6 +107,8 @@ function cartRender() {
     inputName,
     labelLName,
     inputLName,
+    labelEmail,
+    inputEmail,
     labelAddress,
     inputAddress,
     labelPhone,
@@ -101,8 +116,24 @@ function cartRender() {
     labelPayment,
     inputPayment,
     labelDelivery,
-    inputDelivery
+    inputDelivery,
+    Submit
   );
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    if (
+      inputEmail.value.match(mailformat) &&
+      inputName.value.length > 2 &&
+      inputLName.value.length > 2
+    ) {
+      checkoutArr = [];
+      cartArray = [];
+      cartIcon.textContent = cartArray.length;
+      localStorage.setItem("checkout", JSON.stringify(checkoutArr));
+      toLocal();
+      checkoutRender();
+    }
+  });
   cart.forEach((item) => {
     const realIndex = checkoutArr.findIndex((obj) => obj.id === item.id);
     let cartItem = createEl("div", "checkoutItem");
@@ -111,6 +142,7 @@ function cartRender() {
     let select = createEl("span", "Quantity");
     let aTag = createEl("a", "link");
     let itemPrice = 0;
+    aTag.href = `/singleProduct.html?product=${item.id}`;
     cartInfoName.textContent = item.name;
     cartInfoPrice.textContent = `${item.price} €`;
 
@@ -121,25 +153,12 @@ function cartRender() {
     aTag.append(cartInfoName);
     cartItem.append(select, aTag, cartInfoPrice);
     container.append(cartItem);
-    mainContainer.append(
-      checkOutInfoContainer,
-      container,
-      totalPriceContainer,
-      toCartPage
-    );
+    mainContainer.append(checkOutInfoContainer, container, totalPriceContainer);
     displayItem.append(mainContainer, form);
-    localStorage.setItem("cart", JSON.stringify(cartArray));
+    toLocal();
     cartIcon.textContent = cartArray.length;
   });
   totalPriceContainer.append(
     `Total sum: ${Math.round(totalPrice * 100) / 100} €`
   );
-  toCartPage.addEventListener("click", () => {
-    checkoutArr = [];
-    cartArray = [];
-    cartIcon.textContent = cartArray.length;
-    localStorage.setItem("checkout", JSON.stringify(checkoutArr));
-    localStorage.setItem("cart", JSON.stringify(cartArray));
-    cartRender();
-  });
 }

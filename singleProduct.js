@@ -5,14 +5,10 @@ const cartTag = document.querySelector(".cart");
 const searchInput = document.querySelector(".searchInput");
 const searchBtn = document.querySelector(".searchBtn");
 const searchTag = document.querySelector(".searchTag");
+
 let cartArray = [];
 let id = location.href.split("=")[1];
-console.log(id);
-function createEl(type, elClass) {
-  const element = document.createElement(type);
-  element.classList = elClass;
-  return element;
-}
+
 window.addEventListener("load", async () => {
   const result = await fetch("/data.json");
   const data = await result.json();
@@ -25,9 +21,34 @@ window.addEventListener("load", async () => {
     cartRender();
   }
 });
+function createEl(type, elClass) {
+  const element = document.createElement(type);
+  element.classList = elClass;
+  return element;
+}
+function toLocal() {
+  localStorage.setItem("cart", JSON.stringify(cartArray));
+  cartRender();
+}
+function incrementValue(select, quantity) {
+  var value = Number(select.value, quantity);
+  value = isNaN(value) ? 0 : value;
+  if (value < quantity) {
+    value++;
+    select.value = value;
+  }
+}
+function decrementValue(select) {
+  var value = Number(select.value);
+  value = isNaN(value) ? 0 : value;
+  if (value > 1) {
+    value--;
+    select.value = value;
+  }
+}
 
 function render() {
-  const realIndex = items.findIndex((obj) => obj.id === id);
+  let item = items[items.findIndex((obj) => obj.id === id)];
   let card = createEl("div", "itemCard");
   let cardImg = createEl("img", "itemImg");
   let cardInfo = createEl("div", "info-container");
@@ -47,75 +68,56 @@ function render() {
   let descriptionBtn = createEl("button", "descriptionBtn");
   let arrowRight = createEl("div", "arrowRight");
   let arrowLeft = createEl("div", "arrowLeft");
+  const pictureArrLength = item.pictures.length;
+  const picturesArray = item.pictures;
+  let newindex = 0;
+  cartIcon.textContent = 0;
 
-  descriptionP.textContent = items[realIndex].description;
+  descriptionP.textContent = item.description;
   descriptionBtn.textContent = "Overview";
 
   incBtnplus.textContent = "+";
   incBtnminus.textContent = "-";
 
-  select.type = "number";
-  select.min = 1;
-  select.value = select.min;
-  select.max = items[realIndex].quantity;
-
   incBtnplus.addEventListener("click", () => {
-    incrementValue(select, items[realIndex].quantity);
+    incrementValue(select, item.quantity);
   });
   incBtnminus.addEventListener("click", () => {
     decrementValue(select);
   });
-  cartIcon.textContent = 0;
-  cardInfoQuantity.textContent = `Stock: ${items[realIndex].quantity}`;
-  cardInfoName.textContent = items[realIndex].name;
-  cardInfoPrice.textContent = `${items[realIndex].price}$`;
+
+  select.type = "number";
+  select.min = 1;
+  select.value = select.min;
+  select.max = item.quantity;
+  cardInfoQuantity.textContent = `Stock: ${item.quantity}`;
+  cardInfoName.textContent = item.name;
+  cardInfoPrice.textContent = `${item.price}$`;
   toCart.textContent = "Add to cart";
+
   toCart.addEventListener("click", () => {
-    if (select.value > 0 && select.value <= items[realIndex].quantity) {
-      if (cartArray.some((o) => o.id == items[realIndex].id)) {
-        cartArray.find((o) => o.id == items[realIndex].id).quantity += Number(
-          select.value
-        );
+    if (select.value > 0 && select.value <= item.quantity) {
+      if (cartArray.some((o) => o.id == item.id)) {
+        cartArray.find((o) => o.id == item.id).quantity += Number(select.value);
       } else {
         cartArray.push({
-          id: items[realIndex].id,
+          id: item.id,
           quantity: Number(select.value),
         });
       }
     }
     cartIcon.textContent = cartArray.length;
-    cartRender(cartArray, items[realIndex]);
-    localStorage.setItem("cart", JSON.stringify(cartArray));
+    toLocal();
   });
-  //
-  //append section
-  quantityContainer.append(incBtnminus, select, incBtnplus);
-  toCartContainer.append(quantityContainer, toCart);
-  descriptionContainer.appendChild(descriptionP);
-  aTag.append(cardInfoName);
-  cardInfo.append(aTag, descriptionContainer, cardInfoPrice, cardInfoQuantity);
-  if (items[realIndex].description) {
-    cardInfo.insertBefore(descriptionBtn, descriptionContainer);
-  }
-  imageContainer.append(cardImg);
-  if (items[realIndex].pictures.length > 1) {
-    imageContainer.append(arrowRight, arrowLeft);
-  }
-  card.append(imageContainer, cardInfo, toCartContainer);
-  displayItem.appendChild(card);
 
-  //gallery sectiom
-  if (items[realIndex].pictures.length) {
-    cardImg.src = items[realIndex].pictures[0];
-  } else if (items[realIndex].thumbnail) {
-    cardImg.src = items[realIndex].thumbnail;
+  if (item.pictures.length) {
+    cardImg.src = item.pictures[0];
+  } else if (item.thumbnail) {
+    cardImg.src = item.thumbnail;
   } else {
     cardImg.src = "/assets/icons/no-image.png";
   }
 
-  const pictureArrLength = items[realIndex].pictures.length;
-  const picturesArray = items[realIndex].pictures;
-  let newindex = 0;
   function nextImage() {
     if (newindex < pictureArrLength - 1) {
       newindex++;
@@ -144,8 +146,22 @@ function render() {
     descriptionP.classList.toggle("descriptionShow");
     descriptionBtn.classList.toggle("active--button");
   });
+  quantityContainer.append(incBtnminus, select, incBtnplus);
+  toCartContainer.append(quantityContainer, toCart);
+  descriptionContainer.appendChild(descriptionP);
+  aTag.append(cardInfoName);
+  cardInfo.append(aTag, descriptionContainer, cardInfoPrice, cardInfoQuantity);
+  if (item.description) {
+    cardInfo.insertBefore(descriptionBtn, descriptionContainer);
+  }
+  imageContainer.append(cardImg);
+  if (item.pictures.length > 1) {
+    imageContainer.append(arrowRight, arrowLeft);
+  }
+  card.append(imageContainer, cardInfo, toCartContainer);
+  displayItem.appendChild(card);
 }
-//function to render all objects added to cartArray
+
 function cartRender() {
   let cartPageAtag = createEl("a", "toCartPagetag");
   let toCartPage = createEl("button", "toCartPage");
@@ -192,16 +208,14 @@ function cartRender() {
     cartInfoPrice.textContent = item.price;
 
     incBtnplus.addEventListener("click", () => {
-      incrementValue(select, items[realIndex].quantity);
+      incrementValue(select, item.quantity);
       cartArray[realIndex].quantity = Number(select.value);
-      localStorage.setItem("cart", JSON.stringify(cartArray));
-      cartRender();
+      toLocal();
     });
     incBtnminus.addEventListener("click", () => {
       decrementValue(select);
       cartArray[realIndex].quantity = Number(select.value);
-      localStorage.setItem("cart", JSON.stringify(cartArray));
-      cartRender();
+      toLocal();
     });
 
     select.type = "number";
@@ -217,16 +231,14 @@ function cartRender() {
     }
     select.addEventListener("change", (event) => {
       cartArray[realIndex].quantity = event.target.value;
-      localStorage.setItem("cart", JSON.stringify(cartArray));
-      cartRender();
+      toLocal();
     });
     removeBtn.innerHTML = "<i class='fal fa-times'></i>";
 
     removeBtn.addEventListener("click", () => {
       cartArray.splice(realIndex, 1);
-      localStorage.setItem("cart", JSON.stringify(cartArray));
       cartIcon.textContent = cartArray.length;
-      cartRender();
+      toLocal();
     });
     itemPrice = item.price * select.value;
     totalPrice += itemPrice;
@@ -243,23 +255,7 @@ function cartRender() {
     cartPageAtag
   );
 }
-//increase decrease functions to select quantity
-function incrementValue(select, quantity) {
-  var value = Number(select.value, quantity);
-  value = isNaN(value) ? 0 : value;
-  if (value < quantity) {
-    value++;
-    select.value = value;
-  }
-}
-function decrementValue(select) {
-  var value = Number(select.value);
-  value = isNaN(value) ? 0 : value;
-  if (value > 1) {
-    value--;
-    select.value = value;
-  }
-}
+
 //eventlisteners to filter search results
 document.addEventListener("keydown", (event) => {
   if (event.key === "Enter" && searchInput.value) {
